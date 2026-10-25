@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0a1931">
+<meta name="description" content="Contactate con Marea Celestial por WhatsApp o Instagram. Consultas, pedidos y ventas por mayor.">
+<title>Contacto — Marea Celestial</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,600&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0a1931;--gold:#d4af37;--gold-dark:#9a7b3a;--cream:#fdfaf3;--light:#fde68a;--line:#e8dcc0;--muted:#6f6a60;--radius:12px;--header-h:64px}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--cream);color:var(--navy);font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.serif{font-family:'Cormorant Garamond',Georgia,serif}
+.visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.skip-link{position:absolute;left:-9999px;top:0;z-index:100;background:var(--navy);color:#fff;padding:10px 16px;border-radius:0 0 var(--radius) 0}
+.skip-link:focus{left:0}
+
+header{position:sticky;top:0;z-index:50;min-height:var(--header-h);display:flex;align-items:center;justify-content:space-between;gap:16px;background:var(--navy);color:#e8d09a;padding:10px 24px;box-shadow:0 2px 10px rgba(10,25,49,.25)}
+.brand{font-size:20px;font-style:italic;text-decoration:none;white-space:nowrap}
+.nav{display:flex;align-items:center;gap:6px;margin-left:auto}
+.nav a{color:#e8d09a;text-decoration:none;font-size:12px;letter-spacing:1px;padding:8px 10px;border-radius:6px;border-bottom:1px solid transparent;transition:color .2s ease}
+.nav a:hover{color:#fff}
+.nav a.active{color:#fff;border-bottom-color:#fff}
+.header-actions{display:flex;align-items:center;gap:10px;margin-left:auto}
+.cart{display:inline-flex;align-items:center;gap:6px;background:transparent;border:1px solid var(--gold);color:#e8d09a;border-radius:999px;padding:7px 13px;font:inherit;font-size:12px;font-weight:600;cursor:pointer;transition:background .2s ease,color .2s ease}
+.cart:hover{background:var(--gold);color:var(--navy)}
+.nav-toggle{display:none;background:transparent;border:1px solid #e8d09a;color:#e8d09a;border-radius:8px;padding:6px 8px;cursor:pointer}
+
+.page-head{background:var(--navy);color:var(--gold);text-align:center;padding:50px 20px}
+.page-head h1{margin:0;font-size:clamp(1.8rem,5vw,2.4rem);letter-spacing:2px}
+.page-head p{margin:10px 0 0;color:#fff;font-size:13px;opacity:.9}
+
+.contact{max-width:960px;margin:36px auto;padding:0 20px;display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start}
+.cards{display:flex;flex-direction:column;gap:14px}
+.channel{display:flex;align-items:center;gap:14px;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:16px;text-decoration:none;transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease}
+.channel:hover{transform:translateY(-3px);border-color:var(--gold);box-shadow:0 14px 30px rgba(90,74,58,.14)}
+.channel__icon{flex:0 0 44px;width:44px;height:44px;border-radius:50%;background:#f5e9c8;display:flex;align-items:center;justify-content:center;font-size:1.3rem}
+.channel__label{margin:0;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted)}
+.channel__value{margin:2px 0 0;font-size:14px;font-weight:600;color:var(--navy)}
+
+.form{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:22px}
+.form h2{margin:0 0 16px;font-size:1.2rem;color:var(--gold-dark)}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:12px;font-weight:600;margin-bottom:6px}
+.field input,.field textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;font:inherit;font-size:13px;background:var(--cream);color:var(--navy);transition:border-color .2s ease,box-shadow .2s ease}
+.field input:focus,.field textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(212,175,55,.2)}
+.field textarea{resize:vertical;min-height:110px}
+.btn-gold{display:inline-flex;align-items:center;justify-content:center;width:100%;background:var(--light);border:1px solid var(--gold);color:var(--navy);padding:12px;border-radius:6px;font:inherit;font-size:13px;font-weight:700;cursor:pointer;transition:filter .2s ease}
+.btn-gold:hover{filter:brightness(.95)}
+.hint{margin:12px 0 0;font-size:11px;color:var(--muted);text-align:center}
+
+footer{background:var(--navy);color:#e8d09a;font-size:11px;padding:24px;display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between}
+footer a{color:#e8d09a}
+footer strong{display:block;margin-bottom:4px}
+
+@media (max-width:820px){
+  .nav-toggle{display:inline-flex}
+  .nav{position:absolute;top:var(--header-h);left:0;right:0;flex-direction:column;align-items:stretch;gap:2px;margin:0;padding:8px 16px 16px;background:var(--navy);border-top:1px solid rgba(232,208,154,.2);max-height:0;overflow:hidden;transition:max-height .25s ease}
+  header.nav-open .nav{max-height:360px}
+  .nav a{padding:12px 8px;border-bottom:1px solid rgba(232,208,154,.12)}
+  .nav a.active{border-bottom-color:rgba(232,208,154,.12)}
+}
+@media (max-width:680px){
+  .contact{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){
+  .channel{transition:none}
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+<header id="siteHeader">
+  <a class="brand serif" href="index-mejorado.html">Marea Celestial 🌙</a>
+  <nav class="nav" id="mainNav" aria-label="Navegación principal">
+    <a href="index-mejorado.html">INICIO</a>
+    <a href="productos-mejorado.html">PRODUCTOS</a>
+    <a href="colecciones-mejorado.html">COLECCIONES</a>
+    <a href="sobre-nosotros-mejorado.html">SOBRE NOSOTROS</a>
+    <a href="contacto-mejorado.html" class="active" aria-current="page">CONTACTO</a>
+  </nav>
+  <div class="header-actions">
+    <button class="cart" type="button" aria-label="Carrito de compras">
+      <span aria-hidden="true">🛒</span>
+      <span id="cart">0</span>
+    </button>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="mainNav" aria-label="Abrir menú">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="7" x2="21" y2="7"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="17" x2="21" y2="17"></line></svg>
+    </button>
+  </div>
+</header>
+
+<main id="contenido">
+  <div class="page-head">
+    <h1 class="serif">✦ CONTACTO ✦</h1>
+    <p>Estamos para ayudarte a elegir tu accesorio ideal</p>
+  </div>
+
+  <div class="contact">
+    <section class="cards" aria-label="Canales de contacto">
+      <a class="channel" href="https://wa.me/2235970665" target="_blank" rel="noopener">
+        <span class="channel__icon" aria-hidden="true">💬</span>
+        <span>
+          <span class="channel__label">WhatsApp</span>
+          <span class="channel__value">2235970665</span>
+        </span>
+      </a>
+      <a class="channel" href="https://instagram.com/marea_celestial" target="_blank" rel="noopener">
+        <span class="channel__icon" aria-hidden="true">📸</span>
+        <span>
+          <span class="channel__label">Instagram</span>
+          <span class="channel__value">@marea_celestial</span>
+        </span>
+      </a>
+      <a class="channel" href="mailto:hola@mareacelestial.com">
+        <span class="channel__icon" aria-hidden="true">✉️</span>
+        <span>
+          <span class="channel__label">Email</span>
+          <span class="channel__value">hola@mareacelestial.com</span>
+        </span>
+      </a>
+      <div class="channel" style="cursor:default">
+        <span class="channel__icon" aria-hidden="true">🕒</span>
+        <span>
+          <span class="channel__label">Horario</span>
+          <span class="channel__value">Lun a Sáb · 10 a 19 h</span>
+        </span>
+      </div>
+    </section>
+
+    <section class="form" aria-labelledby="formTitle">
+      <h2 id="formTitle" class="serif">Escribinos</h2>
+      <form id="contactForm" novalidate>
+        <div class="field">
+          <label for="nombre">Nombre</label>
+          <input type="text" id="nombre" name="nombre" autocomplete="name" required>
+        </div>
+        <div class="field">
+          <label for="email">Email (opcional)</label>
+          <input type="email" id="email" name="email" autocomplete="email">
+        </div>
+        <div class="field">
+          <label for="mensaje">Mensaje</label>
+          <textarea id="mensaje" name="mensaje" required></textarea>
+        </div>
+        <button class="btn-gold" type="submit">Enviar por WhatsApp</button>
+        <p class="hint">Al enviar, se abrirá WhatsApp con tu mensaje listo para mandar.</p>
+      </form>
+    </section>
+  </div>
+  <p id="cartStatus" class="visually-hidden" role="status"></p>
+</main>
+
+<footer>
+  <div><strong class="serif">Marea Celestial</strong>Boutique de accesorios inspirados en el mar y la luna.</div>
+  <div>Instagram: <a href="https://instagram.com/marea_celestial" target="_blank" rel="noopener">@marea_celestial</a><br>WhatsApp: <a href="https://wa.me/2235970665" target="_blank" rel="noopener">2235970665</a></div>
+</footer>
+
+<script>
+(function () {
+  var header = document.getElementById('siteHeader');
+  var toggle = document.querySelector('.nav-toggle');
+  if (toggle) {
+    toggle.addEventListener('click', function () {
+      var open = header.classList.toggle('nav-open');
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    document.querySelectorAll('.nav a').forEach(function (a) {
+      a.addEventListener('click', function () {
+        header.classList.remove('nav-open');
+        toggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+  }
+
+  var cart = 0;
+  var cartEl = document.getElementById('cart');
+  var status = document.getElementById('cartStatus');
+  try { cart = parseInt(localStorage.getItem('mc_cart'), 10) || 0; } catch (e) { cart = 0; }
+  cartEl.textContent = cart;
+  if (status) status.textContent = cart === 1 ? '1 producto en el carrito' : cart + ' productos en el carrito';
+
+  var form = document.getElementById('contactForm');
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var nombre = document.getElementById('nombre');
+    var email = document.getElementById('email');
+    var mensaje = document.getElementById('mensaje');
+    if (!nombre.value.trim() || !mensaje.value.trim()) {
+      if (!nombre.value.trim()) nombre.focus();
+      else mensaje.focus();
+      return;
+    }
+    var texto = 'Hola Marea Celestial! Soy ' + nombre.value.trim() + '.\n' + mensaje.value.trim();
+    if (email.value.trim()) texto += '\nEmail: ' + email.value.trim();
+    window.open('https://wa.me/2235970665?text=' + encodeURIComponent(texto), '_blank', 'noopener');
+  });
+})();
+</script>
+</body>
+</html>
