@@ -6,14 +6,6 @@ $pdo = conectar();
 $raiz = dirname(__DIR__);
 $dir_respaldos = __DIR__ . "/_backups";
 
-function csrf_token(): string
-{
-    if (empty($_SESSION["csrf_import"])) {
-        $_SESSION["csrf_import"] = bin2hex(random_bytes(16));
-    }
-    return $_SESSION["csrf_import"];
-}
-
 function normalizar_texto(string $texto): string
 {
     $texto = strtolower(trim($texto));
@@ -451,20 +443,30 @@ function restaurar_respaldo(PDO $pdo, string $dir, string $archivo): array
 
     crear_respaldo($pdo, $dir);
 
-    $pdo->exec("DELETE FROM productos");
-    $stmt = $pdo->prepare("INSERT INTO productos (id, id_categoria, producto, precio, imagen, descripcion, stock) VALUES (?, ?, ?, ?, ?, ?, ?)");
-    foreach ($datos["productos"] as $p) {
-        $stmt->execute([
-            (int)$p["id"],
-            (int)$p["id_categoria"],
-            $p["producto"],
-            $p["precio"],
-            $p["imagen"],
-            $p["descripcion"],
-            (int)$p["stock"],
-        ]);
+    /* Restauración atómica: si algo falla, la base queda como estaba. */
+    try {
+        $pdo->beginTransaction();
+        $pdo->exec("DELETE FROM productos");
+        $stmt = $pdo->prepare("INSERT INTO productos (id, id_categoria, producto, precio, imagen, descripcion, stock) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        foreach ($datos["productos"] as $p) {
+            $stmt->execute([
+                (int)$p["id"],
+                (int)$p["id_categoria"],
+                $p["producto"],
+                $p["precio"],
+                $p["imagen"],
+                $p["descripcion"],
+                (int)$p["stock"],
+            ]);
+        }
+        $pdo->commit();
+    } catch (Throwable $e) {
+        if ($pdo->inTransaction()) {
+            $pdo->rollBack();
+        }
+        error_log("MC restaurar respaldo: " . $e->getMessage());
+        return ["ok" => false, "mensaje" => "No se pudo restaurar el respaldo. La base quedó sin cambios."];
     }
-    $pdo->exec("ALTER TABLE productos AUTO_INCREMENT = " . ((int)$pdo->query("SELECT MAX(id) FROM productos")->fetchColumn() + 1));
 
     return ["ok" => true, "mensaje" => "Se restauraron " . count($datos["productos"]) . " productos desde " . basename($archivo) . "."];
 }
@@ -479,7 +481,7 @@ $agotar_ausentes = false;
 $token = csrf_token();
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    if (($_POST["csrf"] ?? "") !== $token) {
+    if (!csrf_valido()) {
         $errores[] = "La sesion expiro. Volve a cargar la pagina e intenta de nuevo.";
     } else {
         $accion = $_POST["accion"] ?? "previsualizar";

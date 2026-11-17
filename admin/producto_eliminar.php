@@ -2,7 +2,12 @@
 require_once "../config.php";
 requiere_login();
 
-$id = isset($_GET["id"]) ? (int)$_GET["id"] : 0;
+if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+    redirigir("productos.php");
+}
+csrf_requerir();
+
+$id = isset($_POST["id"]) ? (int)$_POST["id"] : 0;
 if ($id > 0) {
     $pdo = conectar();
     $stmt = $pdo->prepare("SELECT imagen FROM productos WHERE id = ?");
@@ -10,8 +15,13 @@ if ($id > 0) {
     $prod = $stmt->fetch();
     if ($prod) {
         if (!empty($prod["imagen"]) && str_starts_with($prod["imagen"], "img/")) {
-            $vieja = dirname(__DIR__) . "/" . $prod["imagen"];
-            if (is_file($vieja)) { @unlink($vieja); }
+            $stmt = $pdo->prepare("SELECT COUNT(*) FROM productos WHERE imagen = ? AND id <> ?");
+            $stmt->execute([$prod["imagen"], $id]);
+            $en_uso = (int)$stmt->fetchColumn();
+            if ($en_uso === 0) {
+                $vieja = dirname(__DIR__) . "/" . $prod["imagen"];
+                if (is_file($vieja)) { @unlink($vieja); }
+            }
         }
         $stmt = $pdo->prepare("DELETE FROM productos WHERE id = ?");
         $stmt->execute([$id]);

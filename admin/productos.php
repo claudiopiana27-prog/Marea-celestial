@@ -85,8 +85,11 @@ require_once "_header.php";
                         </td>
                         <td class="text-end">
                             <a href="producto_form.php?id=<?= (int)$p["id"] ?>" class="btn btn-sm btn-outline-warning">Editar</a>
-                            <a href="producto_eliminar.php?id=<?= (int)$p["id"] ?>"
-                               class="btn btn-sm btn-outline-danger btn-eliminar">Eliminar</a>
+                            <form method="post" action="producto_eliminar.php" class="d-inline btn-eliminar-form">
+                                <?= csrf_campo() ?>
+                                <input type="hidden" name="id" value="<?= (int)$p["id"] ?>">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">Eliminar</button>
+                            </form>
                         </td>
                     </tr>
                 <?php endforeach; ?>
@@ -98,7 +101,7 @@ require_once "_header.php";
 function cargar_script_pie(): void { ?>
 <script>
 $(function () {
-    $(".btn-eliminar").on("click", function (e) {
+    $(".btn-eliminar-form").on("submit", function (e) {
         if (!confirm("¿Seguro que querés eliminar este producto?")) {
             e.preventDefault();
         }

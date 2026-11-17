@@ -37,14 +37,15 @@ $titulo = $titulo ?? "Panel de administración";
             background: linear-gradient(135deg, #D4A843, #C9A227);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
-        .sidebar a.nav-link {
+        .sidebar a.nav-link, .sidebar button.nav-link {
             color: #A8C4D8;
             padding: 12px 18px;
             font-weight: 600;
             border-left: 3px solid transparent;
             transition: all 0.2s;
         }
-        .sidebar a.nav-link:hover, .sidebar a.nav-link.active {
+        .sidebar a.nav-link:hover, .sidebar a.nav-link.active,
+        .sidebar button.nav-link:hover {
             color: #F5F0E8;
             background: rgba(201,162,39,0.1);
             border-left-color: #C9A227;
@@ -82,7 +83,11 @@ $titulo = $titulo ?? "Panel de administración";
                 <a class="nav-link <?= str_starts_with(basename($_SERVER['PHP_SELF']), 'categoria') ? 'active' : '' ?>" href="categorias.php">Categorías</a>
                 <a class="nav-link <?= str_starts_with(basename($_SERVER['PHP_SELF']), 'importar') ? 'active' : '' ?>" href="importar.php">Importar</a>
                 <a class="nav-link <?= str_starts_with(basename($_SERVER['PHP_SELF']), 'pedido') ? 'active' : '' ?>" href="pedidos.php">Pedidos</a>
-                <a class="nav-link text-danger" href="logout.php">Salir</a>
+                <a class="nav-link <?= basename($_SERVER['PHP_SELF']) === 'cuenta.php' ? 'active' : '' ?>" href="cuenta.php">Mi cuenta</a>
+                <form method="post" action="logout.php" class="m-0">
+                    <?= csrf_campo() ?>
+                    <button type="submit" class="nav-link text-danger border-0 bg-transparent w-100 text-start">Salir</button>
+                </form>
             </div>
         </div>
         <div class="col">

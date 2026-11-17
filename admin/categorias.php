@@ -7,6 +7,7 @@ $mensaje = $_SESSION["flash"] ?? "";
 unset($_SESSION["flash"]);
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    csrf_requerir();
     $nombre = limpiar($_POST["categoria"] ?? "");
     if ($nombre !== "") {
         $existe = $pdo->prepare("SELECT COUNT(*) FROM categorias WHERE categoria = ?");
@@ -33,12 +34,13 @@ require_once "_header.php";
     <div class="row justify-content-center">
         <div class="col-lg-6">
             <?php if ($mensaje !== ""): ?>
-                <div class="alert alert-<?= $mensaje === "Esa categoría ya existe." ? "warning" : "success" ?> py-2 small"><?= htmlspecialchars($mensaje) ?></div>
+                <div class="alert alert-<?= (str_contains($mensaje, "ya existe") || str_contains($mensaje, "No se puede")) ? "warning" : "success" ?> py-2 small"><?= htmlspecialchars($mensaje) ?></div>
             <?php endif; ?>
 
             <div class="card border-0 shadow-sm mb-4">
                 <div class="card-body p-4">
                     <form method="post" class="d-flex gap-2">
+                        <?= csrf_campo() ?>
                         <input type="text" name="categoria" class="form-control" placeholder="Nueva categoría..." required>
                         <button class="btn btn-dark fw-semibold px-4">Agregar</button>
                     </form>
@@ -60,8 +62,11 @@ require_once "_header.php";
                                 <td class="text-end">
                                     <a href="../productos.php?id=<?= (int)$c["id"] ?>" class="btn btn-sm btn-outline-secondary" target="_blank">Ver</a>
                                     <?php if ((int)$c["cant"] === 0 && (int)$c["id"] > 3): ?>
-                                        <a href="categoria_eliminar.php?id=<?= (int)$c["id"] ?>"
-                                           class="btn btn-sm btn-outline-danger btn-eliminar">Eliminar</a>
+                                        <form method="post" action="categoria_eliminar.php" class="d-inline btn-eliminar-form">
+                                            <?= csrf_campo() ?>
+                                            <input type="hidden" name="id" value="<?= (int)$c["id"] ?>">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger">Eliminar</button>
+                                        </form>
                                     <?php endif; ?>
                                 </td>
                             </tr>
@@ -76,7 +81,7 @@ require_once "_header.php";
 function cargar_script_pie(): void { ?>
 <script>
 $(function () {
-    $(".btn-eliminar").on("click", function (e) {
+    $(".btn-eliminar-form").on("submit", function (e) {
         if (!confirm("¿Seguro que querés eliminar esta categoría?")) { e.preventDefault(); }
     });
 });

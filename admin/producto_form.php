@@ -25,6 +25,7 @@ $imagen_actual = $producto_actual["imagen"] ?? "";
 $stock = (int)($producto_actual["stock"] ?? 0);
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    csrf_requerir();
     $nombre = limpiar($_POST["producto"] ?? "");
     $precio_input = trim($_POST["precio"] ?? "");
     $descripcion = limpiar($_POST["descripcion"] ?? "");
@@ -43,19 +44,27 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if ($subir && !empty($subir["name"])) {
         if ($subir["error"] !== UPLOAD_ERR_OK) {
             $errores[] = "Error al subir la imagen.";
+        } elseif ((int)$subir["size"] > 4 * 1024 * 1024) {
+            $errores[] = "La imagen supera los 4 MB. Comprimila antes de subirla.";
         } else {
             $ext = strtolower(pathinfo($subir["name"], PATHINFO_EXTENSION));
             $permitidas = ["jpg", "jpeg", "png", "webp", "gif"];
-            if (!in_array($ext, $permitidas)) {
-                $errores[] = "Formato de imagen no permitido (usá jpg, png, webp o gif).";
+            $info = @getimagesize($subir["tmp_name"]);
+            $mime_ok = $info !== false && in_array($info["mime"] ?? "", ["image/jpeg", "image/png", "image/webp", "image/gif"], true);
+            if (!in_array($ext, $permitidas) || !$mime_ok) {
+                $errores[] = "El archivo no es una imagen válida (usá jpg, png, webp o gif).";
             } else {
                 $dir_dest = dirname(__DIR__) . "/img";
                 if (!is_dir($dir_dest)) { mkdir($dir_dest, 0777, true); }
                 $archivo = "producto_" . time() . "_" . bin2hex(random_bytes(4)) . "." . $ext;
                 if (move_uploaded_file($subir["tmp_name"], $dir_dest . "/" . $archivo)) {
                     if ($imagen_actual !== "" && str_starts_with($imagen_actual, "img/")) {
-                        $vieja = dirname(__DIR__) . "/" . $imagen_actual;
-                        if (is_file($vieja)) { @unlink($vieja); }
+                        $stmt_img = $pdo->prepare("SELECT COUNT(*) FROM productos WHERE imagen = ? AND id <> ?");
+                        $stmt_img->execute([$imagen_actual, $id]);
+                        if ((int)$stmt_img->fetchColumn() === 0) {
+                            $vieja = dirname(__DIR__) . "/" . $imagen_actual;
+                            if (is_file($vieja)) { @unlink($vieja); }
+                        }
                     }
                     $nueva_ruta = "img/" . $archivo;
                 } else {
@@ -97,6 +106,7 @@ require_once "_header.php";
                     <?php endif; ?>
 
                     <form method="post" action="producto_form.php<?= $id > 0 ? "?id=$id" : "" ?>" enctype="multipart/form-data">
+                        <?= csrf_campo() ?>
                         <input type="hidden" name="id" value="<?= $id ?>">
                         <div class="mb-3">
                             <label class="form-label small fw-semibold">Nombre del producto</label>

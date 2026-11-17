@@ -1,9 +1,35 @@
+# ---------- Tipos MIME ----------
 AddType application/manifest+json .webmanifest
 AddType application/json .json
 <FilesMatch "\.(webmanifest)$">
     Header set Content-Type application/manifest+json
 </FilesMatch>
 
+# ---------- No listar directorios ----------
+Options -Indexes
+
+# ---------- Bloquear archivos sensibles por extensión ----------
+<FilesMatch "\.(sql|sqlite|db|phar|env|log|bak|ini|sh|yml|yaml|md)$">
+    Require all denied
+</FilesMatch>
+
+# ---------- Bloquear archivos de configuración y dependencias ----------
+<FilesMatch "^(composer\.(json|lock)|config\.php)$">
+    Require all denied
+</FilesMatch>
+
+# ---------- Bloquear carpetas de control de versiones y metadatos ----------
 RewriteEngine On
+RewriteRule (^|/)\.(git|env|freebuff)(/|$) - [F,L]
+
+# ---------- Headers de seguridad ----------
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+</IfModule>
+
+# ---------- URLs amigables ----------
 RewriteRule ^robots\.txt$ robots.php [L]
 RewriteRule ^sitemap\.xml$ sitemap.php [L]

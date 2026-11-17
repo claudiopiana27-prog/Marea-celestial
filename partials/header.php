@@ -31,7 +31,11 @@ $mc_nav = [
     ["nosotros",    "Nosotros",  "nosotros.php"],
     ["contacto",    "Contacto",  "contacto.php"],
 ];
-$mc_ver = "20261116c";
+$mc_ver = (string)max(
+    (int)(@filemtime(__DIR__ . "/../assets/css/marea-home.css") ?: 0),
+    (int)(@filemtime(__DIR__ . "/../assets/css/marea-tema.css") ?: 0)
+);
+if ($mc_ver === "0") { $mc_ver = "1"; }
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -66,7 +70,7 @@ $mc_ver = "20261116c";
 
     <?php if ($mc_error_bd !== ""): ?>
         <div style="background:rgba(0,180,216,0.12);border-bottom:1px solid rgba(0,180,216,0.35);color:#0A6E86;padding:10px 20px;font-size:0.85rem;text-align:center">
-            No se pudo cargar el catálogo en este momento. <?= htmlspecialchars($mc_error_bd) ?>
+            No se pudo cargar el catálogo en este momento. Probá de nuevo en unos minutos.
         </div>
     <?php endif; ?>
 

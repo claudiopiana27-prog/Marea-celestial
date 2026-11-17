@@ -168,8 +168,8 @@ require_once "partials/header.php";
         <!-- También te puede gustar -->
         <?php
         try {
-            $stmt_rel = $pdo->prepare("SELECT id, producto, precio, imagen FROM productos WHERE id_categoria = ? AND id <> ? ORDER BY (id = ? ) DESC, RAND() LIMIT 4");
-            $stmt_rel->execute([(int)$producto["id_categoria"], (int)$producto["id"], (int)$producto["id"]]);
+            $stmt_rel = $pdo->prepare("SELECT id, producto, precio, imagen FROM productos WHERE id_categoria = ? AND id <> ? ORDER BY id LIMIT 4");
+            $stmt_rel->execute([(int)$producto["id_categoria"], (int)$producto["id"]]);
             $relacionados = $stmt_rel->fetchAll();
         } catch (Throwable $e) {
             $relacionados = [];

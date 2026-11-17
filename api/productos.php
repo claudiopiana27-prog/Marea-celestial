@@ -41,5 +41,6 @@ try {
         "productos" => $productos,
     ]);
 } catch (Throwable $e) {
-    json_response(["ok" => false, "error" => $e->getMessage()], 500);
+    error_log("MC api/productos: " . $e->getMessage());
+    json_response(["ok" => false, "error" => "No se pudo cargar el catálogo en este momento."], 500);
 }

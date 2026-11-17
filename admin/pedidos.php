@@ -10,13 +10,55 @@ $items_pedido = [];
 
 // Cambiar estado
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["id_pedido"], $_POST["estado"])) {
+    csrf_requerir();
     $estados = ["pendiente", "confirmado", "enviado", "entregado", "cancelado"];
     $nuevo_estado = limpiar($_POST["estado"]);
-    if (in_array($nuevo_estado, $estados, true)) {
-        $stmt = $pdo->prepare("UPDATE pedidos SET estado = ? WHERE id = ?");
-        $stmt->execute([$nuevo_estado, (int)$_POST["id_pedido"]]);
+    $id_objetivo = (int)$_POST["id_pedido"];
+
+    if (in_array($nuevo_estado, $estados, true) && $id_objetivo > 0) {
+        try {
+            $pdo->beginTransaction();
+
+            $stmt = $pdo->prepare("SELECT estado FROM pedidos WHERE id = ? FOR UPDATE");
+            $stmt->execute([$id_objetivo]);
+            $actual = $stmt->fetchColumn();
+
+            if ($actual !== false && $actual !== $nuevo_estado) {
+                $stmt = $pdo->prepare("UPDATE pedidos SET estado = ? WHERE id = ?");
+                $stmt->execute([$nuevo_estado, $id_objetivo]);
+
+                /* Cancelar repone el stock; reactivar un pedido cancelado lo vuelve a descontar. */
+                if ($nuevo_estado === "cancelado") {
+                    $pdo->prepare(
+                        "UPDATE productos p
+                         INNER JOIN (
+                             SELECT id_producto, SUM(cantidad) AS cant
+                             FROM detalle_pedidos WHERE id_pedido = ? GROUP BY id_producto
+                         ) d ON d.id_producto = p.id
+                         SET p.stock = p.stock + d.cant"
+                    )->execute([$id_objetivo]);
+                } elseif ($actual === "cancelado") {
+                    $pdo->prepare(
+                        "UPDATE productos p
+                         INNER JOIN (
+                             SELECT id_producto, SUM(cantidad) AS cant
+                             FROM detalle_pedidos WHERE id_pedido = ? GROUP BY id_producto
+                         ) d ON d.id_producto = p.id
+                         SET p.stock = GREATEST(0, p.stock - d.cant)"
+                    )->execute([$id_objetivo]);
+                }
+            }
+
+            $pdo->commit();
+        } catch (Throwable $e) {
+            if ($pdo->inTransaction()) {
+                $pdo->rollBack();
+            }
+            error_log("MC pedidos estado: " . $e->getMessage());
+            $_SESSION["flash"] = "No se pudo actualizar el estado del pedido.";
+        }
     }
-    redirigir("pedidos.php?id=" . (int)$_POST["id_pedido"]);
+    redirigir("pedidos.php?id=" . $id_objetivo);
 }
 
 if ($id_pedido > 0) {
@@ -51,6 +93,10 @@ if ($filtro_estado !== "") {
 
 require_once "_header.php";
 ?>
+    <?php if (!empty($_SESSION["flash"])): ?>
+        <div class="alert alert-warning py-2 small"><?= htmlspecialchars($_SESSION["flash"]) ?></div>
+        <?php unset($_SESSION["flash"]); ?>
+    <?php endif; ?>
     <?php if ($detalle): ?>
         <a href="pedidos.php" class="btn btn-outline-secondary btn-sm mb-3">&larr; Volver a pedidos</a>
 
@@ -83,6 +129,7 @@ require_once "_header.php";
                     <div class="lbl">Estado del pedido</div>
                     <div class="fw-bold fs-6 mb-2" style="text-transform:capitalize;color:<?= $detalle["estado"] === "cancelado" ? "#dc3545" : "#0d6efd" ?>"><?= htmlspecialchars($detalle["estado"]) ?></div>
                     <form method="post" class="d-flex gap-2">
+                        <?= csrf_campo() ?>
                         <input type="hidden" name="id_pedido" value="<?= (int)$detalle["id"] ?>">
                         <select name="estado" class="form-select form-select-sm">
                             <?php foreach (["pendiente", "confirmado", "enviado", "entregado", "cancelado"] as $est): ?>
