@@ -5,8 +5,8 @@
 
    Variables opcionales que puede definir cada página antes de incluirlo:
      $mc_titulo, $mc_descripcion, $mc_og_titulo, $mc_og_tipo,
-     $mc_og_imagen, $mc_og_url, $mc_pagina, $mc_head_extra, $mc_error_bd,
-     $mc_body_class
+     $mc_og_imagen, $mc_og_url, $mc_canonical, $mc_pagina, $mc_head_extra,
+     $mc_error_bd, $mc_body_class
 */
 if (!function_exists('url_absoluta')) { require_once __DIR__ . "/../config.php"; }
 
@@ -15,7 +15,8 @@ $mc_descripcion = $mc_descripcion ?? "Bolsos, carteras y monederos en ecocuero d
 $mc_og_titulo   = $mc_og_titulo   ?? $mc_titulo;
 $mc_og_tipo     = $mc_og_tipo     ?? "website";
 $mc_og_imagen   = $mc_og_imagen   ?? "img/og-image.jpg";
-$mc_og_url      = $mc_og_url      ?? "";
+$mc_canonical   = $mc_canonical   ?? url_canonica();
+$mc_og_url      = $mc_og_url      ?? $mc_canonical;
 $mc_pagina      = $mc_pagina      ?? "";
 $mc_head_extra  = $mc_head_extra  ?? "";
 $mc_error_bd    = $mc_error_bd    ?? "";
@@ -50,6 +51,7 @@ if ($mc_ver === "0") { $mc_ver = "1"; }
     <link rel="icon" type="image/png" sizes="192x192" href="img/favicon-192.png">
     <link rel="apple-touch-icon" href="img/favicon-192.png">
     <link rel="manifest" href="manifest.webmanifest">
+    <link rel="canonical" href="<?= htmlspecialchars($mc_canonical) ?>">
     <meta property="og:type" content="<?= htmlspecialchars($mc_og_tipo) ?>">
     <meta property="og:site_name" content="Marea Celestial">
     <meta property="og:title" content="<?= htmlspecialchars($mc_og_titulo) ?>">

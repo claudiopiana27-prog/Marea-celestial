@@ -10,6 +10,7 @@ Sitio público exportado a HTML puro, sin PHP ni base de datos.
 - `colecciones.html`
 - `nosotros.html`
 - `contacto.html`
+- `404.html` — página de error (configurala como 404 en tu hosting)
 
 ## Carrito y pedidos
 

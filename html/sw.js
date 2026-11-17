@@ -1,4 +1,4 @@
-const CACHE = 'marea-celestial-static-20261117013837';
+const CACHE = 'marea-celestial-static-20261117014944';
 const SCOPE = self.registration.scope;
 const RUTAS = [
   'index.html',
@@ -8,8 +8,8 @@ const RUTAS = [
   'contacto.html',
   'assets/css/bootstrap.min.css',
   'assets/css/plumage.css',
-  'assets/css/marea-home.css?v=20261117013837',
-  'assets/css/marea-tema.css?v=20261117013837',
+  'assets/css/marea-home.css?v=20261117014944',
+  'assets/css/marea-tema.css?v=20261117014944',
   'assets/js/jquery.min.js',
   'assets/js/bootstrap.bundle.min.js',
   'img/logo.jpg',

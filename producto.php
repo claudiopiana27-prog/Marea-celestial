@@ -34,6 +34,7 @@ $mc_og_titulo   = $titulo;
 $mc_og_tipo     = "product";
 $mc_og_imagen   = $imagen_full;
 $mc_og_url      = $url_actual;
+$mc_canonical   = $url_actual;
 $mc_pagina      = "productos";
 
 ob_start();

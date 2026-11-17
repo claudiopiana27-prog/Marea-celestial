@@ -35,6 +35,40 @@ function url_absoluta(string $ruta): string
     return url_base() . "/" . ltrim($ruta, "/");
 }
 
+/* URL completa de la página actual (para canonical y og:url). */
+function url_actual(): string
+{
+    $https = (!empty($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] !== "off")
+        || (($_SERVER["HTTP_X_FORWARDED_PROTO"] ?? "") === "https");
+    $host = $_SERVER["HTTP_HOST"] ?? "localhost";
+    $uri = $_SERVER["REQUEST_URI"] ?? "/";
+    return ($https ? "https" : "http") . "://" . $host . $uri;
+}
+
+/* Igual que url_actual pero sin parámetros de tracking; solo conserva ?id=N. */
+function url_canonica(): string
+{
+    $url = url_actual();
+    $partes = parse_url($url);
+    if ($partes === false) {
+        return $url;
+    }
+    $base = ($partes["scheme"] ?? "http") . "://" . ($partes["host"] ?? "localhost");
+    if (!empty($partes["port"])) {
+        $base .= ":" . $partes["port"];
+    }
+    $base .= $partes["path"] ?? "/";
+
+    $params = [];
+    if (!empty($partes["query"])) {
+        parse_str($partes["query"], $params);
+    }
+    if (isset($params["id"]) && ctype_digit((string)$params["id"])) {
+        $base .= "?id=" . (int)$params["id"];
+    }
+    return $base;
+}
+
 function conectar(): PDO
 {
     static $pdo = null;
