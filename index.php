@@ -6,6 +6,7 @@ $mc_descripcion = "Marea Celestial: marroquinería urbana hecha para el día a d
 $mc_og_titulo   = "Marea Celestial | Accesorios Urbanos";
 $mc_og_imagen   = "img/og-image.jpg";
 $mc_pagina      = "inicio";
+$mc_body_class  = "mc-home";
 
 /* Productos: se conservan las consultas y el markup de las cards existentes. */
 $mcProductos  = [];
@@ -32,77 +33,9 @@ try {
     $mc_error_bd = $e->getMessage();
 }
 
-$mc_nav = [
-    ["INICIO",      "index.php",          false],
-    ["BOLSOS",      "productos.php?id=1", true],
-    ["CARTERAS",    "productos.php?id=2", false],
-    ["RIÑONERAS",   "productos.php",      false],
-    ["NOVEDADES",   "productos.php",      false],
-    ["COLECCIÓN",   "colecciones.php",    false],
-];
+/* Header + nav compartidos: mismo diseño en todas las páginas. */
+require_once "partials/header.php";
 ?>
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= htmlspecialchars($mc_titulo) ?></title>
-    <meta name="description" content="<?= htmlspecialchars($mc_descripcion) ?>">
-    <meta name="theme-color" content="#0A1F44">
-    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="img/favicon-192.png">
-    <link rel="apple-touch-icon" href="img/favicon-192.png">
-    <link rel="manifest" href="manifest.webmanifest">
-    <meta property="og:type" content="website">
-    <meta property="og:site_name" content="Marea Celestial">
-    <meta property="og:title" content="<?= htmlspecialchars($mc_og_titulo) ?>">
-    <meta property="og:description" content="<?= htmlspecialchars($mc_descripcion) ?>">
-    <meta property="og:image" content="<?= htmlspecialchars(url_absoluta($mc_og_imagen)) ?>">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/css/plumage.css">
-    <link rel="stylesheet" href="assets/css/marea-home.css">
-</head>
-<body class="mc-home">
-    <a class="skip-link" href="#coleccion">Saltar al contenido</a>
-
-    <!-- 1. HEADER -->
-    <header class="mc-header">
-        <div class="mc-header__sky" aria-hidden="true"></div>
-        <div class="mc-header__waves" aria-hidden="true"></div>
-
-        <svg class="mc-header__moons mc-header__moons--l" width="46" height="46" viewBox="0 0 46 46" fill="none" aria-hidden="true">
-            <path d="M30 5a17 17 0 1 0 11 22A14 14 0 1 1 30 5z" fill="currentColor" opacity=".8"/>
-            <path d="M34 8l1.6 4.4L40 14l-4.4 1.6L34 20l-1.6-4.4L28 14l4.4-1.6z" fill="currentColor" opacity=".65"/>
-        </svg>
-        <svg class="mc-header__moons mc-header__moons--r" width="46" height="46" viewBox="0 0 46 46" fill="none" aria-hidden="true">
-            <path d="M30 5a17 17 0 1 0 11 22A14 14 0 1 1 30 5z" fill="currentColor" opacity=".8"/>
-            <path d="M34 8l1.6 4.4L40 14l-4.4 1.6L34 20l-1.6-4.4L28 14l4.4-1.6z" fill="currentColor" opacity=".65"/>
-        </svg>
-
-        <div class="mc-header__inner">
-            <a class="mc-brand" href="index.php" aria-label="Marea Celestial — Inicio">
-                <img src="img/logo.jpg" alt="Marea Celestial" class="mc-brand__logo" width="74" height="74">
-                <span class="mc-brand__text">
-                    <span class="mc-brand__name">Marea celestial</span>
-                    <span class="mc-brand__sub">Accesorios &bull; Cuero urbano</span>
-                </span>
-            </a>
-        </div>
-    </header>
-
-    <!-- 2. NAV -->
-    <nav class="mc-nav" aria-label="Navegación principal">
-        <ul class="mc-nav__list">
-            <?php foreach ($mc_nav as [$texto, $href, $activo]): ?>
-            <li>
-                <a class="mc-nav__link<?= $activo ? ' is-active' : '' ?>" href="<?= htmlspecialchars($href) ?>"<?= $activo ? ' aria-current="page"' : '' ?>><?= htmlspecialchars($texto) ?></a>
-            </li>
-            <?php endforeach; ?>
-        </ul>
-    </nav>
 
     <main>
         <!-- 3. HERO SPLIT -->
@@ -153,10 +86,10 @@ $mc_nav = [
                 <div class="mc-hero__sky" aria-hidden="true"></div>
                 <figure class="mc-hero__figure">
                     <img class="mc-hero__photo"
-                         src="img/catalogo/nuevo-12.jpg"
-                         alt="Modelo urbana con bolso de cuero Marea Celestial"
-                         width="1080" height="1483"
-                         loading="eager">
+                         src="img/og-image.jpg"
+                         alt="Marea Celestial — accesorios de cuero urbano"
+                         width="1200" height="1200"
+                         fetchpriority="high">
                 </figure>
 
                 <?php if ($mcHeroBolsos): ?>

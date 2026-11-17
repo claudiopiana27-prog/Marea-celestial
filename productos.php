@@ -29,8 +29,6 @@ $mc_pagina      = "productos";
 ob_start();
 ?>
 <style>
-    body { padding-top: 72px; }
-
     .chip {
         text-decoration: none; white-space: nowrap;
         height: 38px; display: inline-flex; align-items: center;
@@ -39,7 +37,7 @@ ob_start();
         color: var(--fg-muted); font-size: var(--text-sm); font-weight: 600;
         transition: all var(--dur-base) var(--ease-out);
     }
-    .chip:hover { border-color: var(--gold); color: var(--gold); background: var(--gold-subtle); }
+    .chip:hover { border-color: var(--gold); color: var(--gold-dark); background: var(--gold-subtle); }
     .chip.active {
         background: linear-gradient(135deg, var(--gold), var(--gold-dark));
         border-color: transparent; color: var(--navy-dark);
@@ -115,7 +113,6 @@ ob_start();
         cursor: pointer; transition: all var(--dur-fast);
     }
     .qty-btn:hover { border-color: var(--gold); color: var(--gold); background: var(--gold-subtle); }
-    #catsBar { position: sticky; top: 72px; }
 </style>
 <?php
 $mc_head_extra = ob_get_clean();
@@ -123,17 +120,18 @@ require_once "partials/header.php";
 ?>
 
     <!-- Chips de categoría + buscador -->
+    <main>
     <div class="z-[150] w-100 glass" id="catsBar" style="box-shadow:0 4px 12px rgba(90, 74, 58, 0.10)">
         <div class="d-flex align-items-center gap-2 py-2 px-3">
             <div class="position-relative flex-grow-1" style="min-width:0">
                 <input type="search" id="buscador" class="form-control" placeholder="Buscar producto (ej: cartera, billetera, tote)"
                        aria-label="Buscar producto" autocomplete="off"
-                       style="border-radius:var(--radius-full);border:1.5px solid var(--border);background:rgba(255,255,255,0.04);color:var(--fg);font-size:var(--text-sm);padding-left:36px">
+                       style="border-radius:999px;padding-left:36px">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                     style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--fg-subtle)"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                     style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--mc-gold-dark)"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
             </div>
         </div>
-        <div class="d-flex gap-2 overflow-auto py-2 px-3" style="scrollbar-width:none">
+        <div class="d-flex gap-2 overflow-auto py-2 px-3" style="scrollbar-width:none" aria-label="Filtrar por categoría">
             <a href="productos.php" class="chip <?= $id_categoria === 0 ? 'active' : '' ?>">Ver todos</a>
             <?php foreach ($cats as $cat):
                 $activo = ($id_categoria === (int)$cat["id"]) ? "active" : "";
@@ -211,6 +209,7 @@ require_once "partials/header.php";
         <?php endforeach; ?>
         </div>
     </div>
+    </main>
 
     <!-- Modal de producto -->
     <div class="modal fade" id="modalProducto" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
@@ -233,7 +232,7 @@ require_once "partials/header.php";
                                 <span class="text-fg-muted small">Cantidad</span>
                                 <div class="d-flex align-items-center gap-2">
                                     <button class="qty-btn" id="cantMenos" type="button" aria-label="Quitar uno">−</button>
-                                    <span id="cantValor" class="fw-bold" style="min-width:24px;text-align:center">1</span>
+                                    <span id="cantValor" class="fw-bold" style="min-width:24px;text-align:center" aria-live="polite">1</span>
                                     <button class="qty-btn" id="cantMas" type="button" aria-label="Agregar uno">+</button>
                                 </div>
                             </div>

@@ -39,7 +39,6 @@ $mc_pagina      = "productos";
 ob_start();
 ?>
 <style>
-    body { padding-top: 72px; }
     .product-hero {
         position: relative; border-radius: var(--radius-lg); overflow: hidden;
         border: 1.5px solid var(--border); background: var(--bg-card);
@@ -108,7 +107,7 @@ require_once "partials/header.php";
                 <span class="badge badge-gold mb-3"><?= htmlspecialchars($producto["cat_nombre"] ?? "") ?></span>
                 <h1 class="display-section mb-2" style="color:var(--fg)"><?= htmlspecialchars($producto["producto"]) ?></h1>
                 <div class="mb-4 d-flex align-items-center flex-wrap gap-2">
-                    <span class="fs-3 fw-bold" style="color:var(--gold)"><?= $precio ?></span>
+                    <span class="fs-3 fw-bold" style="color:var(--gold-dark)"><?= $precio ?></span>
                     <span class="badge-stock <?= $hay_stock ? 'ok' : 'no' ?>" id="badgeStock">
                         <?= $hay_stock ? '✔ En stock' : '✖ Agotado' ?>
                     </span>
@@ -117,7 +116,7 @@ require_once "partials/header.php";
                     <p class="text-fg-muted text-lg mb-4" style="line-height:1.7"><?= htmlspecialchars($producto["descripcion"]) ?></p>
                 <?php endif; ?>
                 <div class="d-flex align-items-center gap-3 flex-wrap mb-3" id="qtyControl" style="<?= $hay_stock ? '' : 'display:none!important' ?>">
-                    <label class="text-sm fw-semibold" style="color:var(--fg)">Cantidad</label>
+                    <label class="text-sm fw-semibold" for="cantidad" style="color:var(--fg)">Cantidad</label>
                     <div class="qty-wrap">
                         <button type="button" class="qty-btn" data-action="restar" aria-label="Disminuir cantidad">−</button>
                         <input type="number" id="cantidad" class="qty-input" min="1" max="<?= max(1, (int)$producto['stock']) ?>" value="1" readonly>

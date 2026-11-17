@@ -5,7 +5,9 @@ $base = rtrim(url_base(), "/");
 $urls = [];
 $urls[] = ["$base/index.php", "daily", 1.0];
 $urls[] = ["$base/productos.php", "daily", 0.9];
+$urls[] = ["$base/colecciones.php", "weekly", 0.8];
 $urls[] = ["$base/nosotros.php", "monthly", 0.6];
+$urls[] = ["$base/contacto.php", "monthly", 0.6];
 try {
     $pdo = conectar();
     foreach ($pdo->query("SELECT p.id, p.id_categoria FROM productos p INNER JOIN categorias c ON c.id = p.id_categoria ORDER BY p.id") as $pr) {

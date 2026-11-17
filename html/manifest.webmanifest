@@ -1,0 +1,23 @@
+{
+    "name": "Marea Celestial",
+    "short_name": "Marea",
+    "description": "Bolsos, carteras y monederos en ecocuero. Compra directa por WhatsApp.",
+    "start_url": "index.html",
+    "display": "standalone",
+    "background_color": "#FFFBF2",
+    "theme_color": "#FFFBF2",
+    "orientation": "portrait",
+    "icons": [
+        {
+            "src": "img/favicon-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "img/favicon-32.png",
+            "sizes": "32x32",
+            "type": "image/png"
+        }
+    ]
+}

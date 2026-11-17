@@ -1,0 +1,696 @@
+/* ============================================================
+   MAREA CELESTIAL — Tema global (todas las páginas)
+   Réplica de la estética del flyer:
+     · Marco de olas acuarela en los bordes de la página
+     · Paleta exacta Navy #0A1F44 · Gold #D4AF37 · Turquesa #00B4D8 · Crema #F5F1E8
+     · Títulos en Cormorant Garamond, texto en Montserrat
+     · Cards blancas con borde dorado · Banda dorada de cierre
+   Se carga después de plumage.css y marea-home.css.
+   ============================================================ */
+
+:root {
+    --mc-navy: #0A1F44;
+    --mc-gold: #D4AF37;
+    --mc-turq: #00B4D8;
+    --mc-cream: #F5F1E8;
+    --mc-gold-dark: #7A5C18;
+    --mc-navh: 64px;
+
+    /* Remapeo de tokens del design system a la paleta del manual */
+    --color-primary: #0A1F44;
+    --color-secondary: #00B4D8;
+    --color-accent: #D4AF37;
+    --color-bg: #F5F1E8;
+    --color-bg-card: #FFFFFF;
+    --color-primary-a08: rgba(10, 31, 68, 0.08);
+    --color-primary-a12: rgba(10, 31, 68, 0.12);
+    --color-primary-a20: rgba(10, 31, 68, 0.20);
+    --color-primary-a45: rgba(10, 31, 68, 0.45);
+    --color-primary-a70: rgba(10, 31, 68, 0.70);
+    --color-secondary-a10: rgba(0, 180, 216, 0.10);
+    --color-secondary-a20: rgba(0, 180, 216, 0.20);
+    --color-secondary-a35: rgba(0, 180, 216, 0.35);
+    --color-accent-a12: rgba(212, 175, 55, 0.12);
+    --color-accent-a22: rgba(212, 175, 55, 0.22);
+    --color-accent-a40: rgba(212, 175, 55, 0.40);
+    --color-accent-a60: rgba(212, 175, 55, 0.60);
+    --color-bg-glass: rgba(245, 241, 232, 0.94);
+    --color-bg-faint: rgba(245, 241, 232, 0.60);
+    /* Tokens heredados del design system: dorado legible y grises con contraste. */
+    --gold-dark: #7A5C18;
+    --fg-muted: rgba(10, 31, 68, 0.72);
+    --fg-subtle: rgba(10, 31, 68, 0.68);
+    --font-display: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+    --font-body: 'Montserrat', 'Inter', -apple-system, sans-serif;
+    --font-sans: var(--font-body);
+}
+
+/* ---------- Base ---------- */
+body.mc-page {
+    background: var(--mc-cream);
+    color: var(--mc-navy);
+    font-family: var(--font-body);
+    padding-top: 0 !important;   /* el header ya no es fixed */
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+/* Tipografía de texto general: home vs páginas internas */
+body.mc-home {
+    font-size: 0.95rem;
+    line-height: 1.7;
+}
+
+.mc-page main p,
+.mc-page main li,
+.mc-page main figure,
+.mc-page main .card-producto__body,
+.mc-page main .ct-panel__body,
+.mc-page main .col-panel__body {
+    color: var(--mc-navy);
+}
+
+.mc-page main p {
+    margin: 0 0 1rem;
+}
+
+.mc-page main ul,
+.mc-page main ol {
+    margin: 0 0 1rem 1.4rem;
+    padding: 0;
+}
+
+.mc-page main li {
+    margin-bottom: 0.4rem;
+}
+
+.mc-page main strong {
+    font-weight: 700;
+    color: var(--mc-navy);
+}
+
+.mc-page main em {
+    font-style: italic;
+    color: var(--mc-navy);
+}
+
+.mc-page main a {
+    color: var(--mc-turq);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(0, 180, 216, 0.28);
+}
+
+.mc-page main a:hover {
+    color: var(--mc-gold-dark);
+    border-bottom-color: var(--mc-gold-dark);
+}
+
+/* Los enlaces que son componentes (botones, chips, CTAs, miniaturas)
+   no heredan el subrayado ni el color turquesa del texto corrido. */
+.mc-page main a.mc-hero__cta,
+.mc-page main a.mc-btn-outline,
+.mc-page main a.btn,
+.mc-page main a.btn-share,
+.mc-page main a.chip,
+.mc-page main [aria-label="breadcrumb"] a,
+.mc-page main .col-mini a,
+.mc-page main .card-producto h3 a,
+.mc-page main .product-card a,
+.mc-page main .col-panel__titulo a,
+.mc-page main .ct-panel__titulo a {
+    border-bottom: 0;
+}
+
+.mc-page main a.mc-hero__cta,
+.mc-page main a.mc-hero__cta:hover,
+.mc-page main a.mc-btn-outline,
+.mc-page main a.mc-btn-outline:hover,
+.mc-page main a.btn-share {
+    color: var(--mc-navy);
+}
+
+.mc-page main a.btn-share:hover {
+    color: var(--mc-gold-dark);
+}
+
+.mc-page main .card-producto h3,
+.mc-page main .ct-panel__titulo,
+.mc-page main .col-panel__titulo {
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--mc-navy);
+    line-height: 1.25;
+    margin: 0 0 0.5rem 0;
+}
+
+.mc-page main .card-producto h3 a,
+.mc-page main .ct-panel__titulo a,
+.mc-page main .col-panel__titulo a {
+    color: var(--mc-navy);
+    text-decoration: none;
+}
+
+/* Formularios: inputs/conbs completos estilo flyer (blanco, borde dorado, placeholder gris suave) */
+.mc-page input[type="text"],
+.mc-page input[type="email"],
+.mc-page input[type="tel"],
+.mc-page input[type="password"],
+.mc-page input[type="number"],
+.mc-page select,
+.mc-page textarea {
+    width: 100%;
+    background: #FFFFFF;
+    border: 1px solid rgba(212, 175, 55, 0.55);
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-family: var(--font-body);
+    font-size: 0.84rem;
+    color: var(--mc-navy);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.mc-page input[type="text"]:focus,
+.mc-page input[type="email"]:focus,
+.mc-page input[type="tel"]:focus,
+.mc-page input[type="password"]:focus,
+.mc-page input[type="number"]:focus,
+.mc-page select:focus,
+.mc-page textarea:focus {
+    outline: none;
+    border-color: var(--mc-gold);
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.18);
+}
+
+.mc-page select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%238A6A1F' d='M6 2L1 9h10z'/%3E%3C/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
+}
+
+.mc-page ::placeholder {
+    color: rgba(10, 31, 68, 0.5);
+    opacity: 1;
+}
+
+/* Tabla interna: cabecera navy con texto crema */
+.mc-page table th,
+.mc-page table td {
+    padding: 10px 12px;
+    border: 1px solid rgba(212, 175, 55, 0.35);
+    text-align: left;
+}
+
+.mc-page table th {
+    background: var(--mc-navy);
+    color: var(--mc-cream);
+    font-family: var(--font-body);
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+}
+
+.mc-page table tr:nth-child(even) td {
+    background: rgba(245, 241, 232, 0.35);
+}
+
+/* Contenedores de ancho promediado para el manual */
+.mc-page .container-inner {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.mc-page .atmosphere,
+.mc-page .bg-grid { display: none !important; }
+
+.mc-page h1,
+.mc-page h2,
+.mc-page h3,
+.mc-page h4,
+.mc-page h5 {
+    font-family: var(--font-display);
+    color: var(--mc-navy);
+}
+
+.mc-page ::selection { background: var(--mc-gold); color: var(--mc-navy); }
+
+/* ---------- Marco de olas (bordes de la página) ---------- */
+.mc-page-frame {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    border: 1px solid rgba(212, 175, 55, 0.22);
+    background-repeat: no-repeat, no-repeat;
+    background-position: top center, bottom center;
+    background-size: 100% 132px, 100% 132px;
+    background-image:
+        url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201440%20170'%20preserveAspectRatio='none'%3E%3Cpath%20d='M0%200h1440v40c-150%2034-300%206-460%2028-160%2022-300-10-470%2016C350%20110%20170%2078%200%2096z'%20fill='%230A1F44'%20opacity='.09'/%3E%3Cpath%20d='M0%200h1440v22c-160%2028-320%202-470%2022-170%2022-300-10-470%2014C330%2078%20150%2056%200%2070z'%20fill='%2300B4D8'%20opacity='.15'/%3E%3Cpath%20d='M0%2096c170-18%20350%2014%20510-12%20170-26%20310%206%20470-16%20160-22%20310%206%20460-28'%20fill='none'%20stroke='%23D4AF37'%20stroke-width='2'%20opacity='.5'/%3E%3C/svg%3E"),
+        url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201440%20170'%20preserveAspectRatio='none'%3E%3Cg%20transform='scale(1,-1)%20translate(0,-170)'%3E%3Cpath%20d='M0%200h1440v40c-150%2034-300%206-460%2028-160%2022-300-10-470%2016C350%20110%20170%2078%200%2096z'%20fill='%230A1F44'%20opacity='.09'/%3E%3Cpath%20d='M0%200h1440v22c-160%2028-320%202-470%2022-170%2022-300-10-470%2014C330%2078%20150%2056%200%2070z'%20fill='%2300B4D8'%20opacity='.15'/%3E%3Cpath%20d='M0%2096c170-18%20350%2014%20510-12%20170-26%20310%206%20470-16%20160-22%20310%206%20460-28'%20fill='none'%20stroke='%23D4AF37'%20stroke-width='2'%20opacity='.5'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* Media luna y estrellas en las esquinas superiores */
+.mc-page-frame::before,
+.mc-page-frame::after {
+    content: '';
+    position: absolute;
+    top: 14px;
+    width: 64px;
+    height: 64px;
+    opacity: 0.5;
+    background: no-repeat center / contain
+        url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Cg%20fill='%23D4AF37'%3E%3Cpath%20d='M40%206a22%2022%200%201%200%2011%2028A18%2018%200%201%201%2040%206z'/%3E%3Cpath%20d='M48%2010l1.8%204.9L55%2017l-5.2%202.1L48%2024l-1.8-4.9L41%2017l5.2-2.1z'/%3E%3C/g%3E%3C/svg%3E");
+}
+.mc-page-frame::before { left: 18px; }
+.mc-page-frame::after { right: 18px; transform: scaleX(-1); }
+
+@media (max-width: 640px) {
+    .mc-page-frame::before,
+    .mc-page-frame::after { display: none; }
+    .mc-page-frame { background-size: 100% 90px, 100% 90px; }
+}
+
+/* ---------- Navegación ---------- */
+.mc-nav__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 4px;
+    padding: 9px 20px;
+    background: var(--mc-gold);
+    color: var(--mc-navy) !important;
+    border: 1px solid var(--mc-gold);
+    border-radius: 999px;
+    font-family: var(--font-body);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-decoration: none;
+    box-shadow: 0 8px 18px rgba(212, 175, 55, 0.32);
+    transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+.mc-nav__cta:hover {
+    background: #e0bd4b;
+    color: var(--mc-navy) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 12px 24px rgba(212, 175, 55, 0.4);
+}
+
+.mc-nav__install {
+    display: none;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 18px;
+    background: transparent;
+    border: 1px solid rgba(212, 175, 55, 0.7);
+    border-radius: 999px;
+    color: var(--mc-gold-dark);
+    font-family: var(--font-body);
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+.mc-nav__install:hover { background: rgba(212, 175, 55, 0.14); }
+
+/* ---------- Títulos de página (estilo flyer) ---------- */
+.mc-page main h1,
+.mc-page .ct-hero__titulo,
+.mc-page .col-hero__titulo {
+    font-family: var(--font-display);
+    font-weight: 600 !important;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    line-height: 1.15;
+    color: var(--mc-navy);
+}
+
+.mc-page .display-section,
+.mc-page .display-card {
+    color: var(--mc-navy);
+    letter-spacing: 0.02em;
+}
+
+.mc-page .ct-hero__titulo,
+.mc-page .col-hero__titulo { color: var(--mc-gold-dark); }
+
+/* Texto con degradé: dorado legible sobre crema */
+.mc-page .text-gradient-celestial {
+    background: linear-gradient(135deg, #8A6A1F 0%, #D4AF37 55%, #B08A2A 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: none;
+}
+
+.mc-page .text-gold { color: var(--mc-gold-dark); }
+.mc-page .text-fg-muted { color: rgba(10, 31, 68, 0.72); }
+.mc-page .text-fg-subtle { color: rgba(10, 31, 68, 0.68); }
+
+/* Separador decorativo con estrellas */
+.mc-page .mc-rule {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin: 18px auto 0;
+    max-width: 420px;
+    color: var(--mc-gold);
+    font-size: 0.7rem;
+}
+.mc-page .mc-rule::before,
+.mc-page .mc-rule::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--mc-gold), transparent);
+}
+
+/* ---------- Badges / eyebrow ---------- */
+.mc-page .badge-gold,
+.mc-page .badge-turquoise,
+.mc-page .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 16px;
+    border-radius: 999px;
+    font-family: var(--font-body);
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+}
+.mc-page .badge-gold {
+    background: rgba(212, 175, 55, 0.10);
+    border: 1px solid rgba(212, 175, 55, 0.55);
+    color: var(--mc-gold-dark);
+}
+.mc-page .badge-turquoise {
+    background: rgba(0, 180, 216, 0.10);
+    border: 1px solid rgba(0, 180, 216, 0.40);
+    color: #0A6E86;
+}
+
+/* ---------- Botones ---------- */
+.mc-page .btn-primary {
+    background: var(--mc-gold);
+    background-image: none;
+    border: 1px solid var(--mc-gold);
+    border-radius: 10px;
+    color: var(--mc-navy);
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    padding: 13px 26px;
+    box-shadow: 0 10px 24px rgba(212, 175, 55, 0.28);
+}
+.mc-page .btn-primary:hover,
+.mc-page .btn-primary:focus {
+    background: #e0bd4b;
+    border-color: #e0bd4b;
+    color: var(--mc-navy);
+    box-shadow: 0 14px 30px rgba(212, 175, 55, 0.36);
+}
+
+.mc-page .btn-outline {
+    background: transparent;
+    border: 1px solid var(--mc-gold);
+    border-radius: 10px;
+    color: var(--mc-navy);
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    padding: 13px 26px;
+}
+.mc-page .btn-outline:hover,
+.mc-page .btn-outline:focus {
+    background: var(--mc-gold);
+    border-color: var(--mc-gold);
+    color: var(--mc-navy);
+}
+
+/* ---------- Chips de categoría ---------- */
+.mc-page .chip {
+    border: 1px solid rgba(212, 175, 55, 0.55);
+    background: rgba(255, 255, 255, 0.55);
+    color: var(--mc-navy);
+    font-family: var(--font-body);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border-radius: 999px;
+}
+.mc-page .chip:hover {
+    border-color: var(--mc-gold);
+    background: rgba(212, 175, 55, 0.12);
+    color: var(--mc-gold-dark);
+}
+.mc-page .chip.active {
+    background: var(--mc-gold);
+    border-color: var(--mc-gold);
+    color: var(--mc-navy);
+    box-shadow: 0 8px 18px rgba(212, 175, 55, 0.35);
+}
+
+/* Barra sticky de categorías debajo del nav */
+.mc-page #catsBar {
+    position: sticky;
+    top: var(--mc-navh) !important;
+    background: rgba(245, 241, 232, 0.96) !important;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.35);
+    box-shadow: 0 4px 14px rgba(10, 31, 68, 0.06) !important;
+}
+.mc-page #catsBar .form-control {
+    background: #FFFFFF;
+    border: 1px solid rgba(212, 175, 55, 0.45);
+    color: var(--mc-navy);
+}
+
+/* ---------- Cards: blancas con borde dorado ---------- */
+.mc-page .product-card,
+.mc-page .feature-card,
+.mc-page .ct-panel,
+.mc-page .ct-channel,
+.mc-page .col-panel,
+.mc-page .glass-strong,
+.mc-page .card-producto {
+    background: #FFFFFF;
+    border: 1px solid var(--mc-gold);
+    border-radius: 12px;
+    box-shadow: 0 10px 28px rgba(10, 31, 68, 0.08);
+}
+
+.mc-page .glass-strong {
+    background: #FFFFFF !important;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+.mc-page .product-card {
+    transform: none;
+    perspective: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.mc-page .product-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--mc-gold);
+    box-shadow: 0 20px 42px rgba(10, 31, 68, 0.16);
+}
+.mc-page .product-card .img-wrap { background: var(--mc-cream); }
+.mc-page .product-card .img-wrap::after { display: none; }
+.mc-page .product-card:hover img { transform: scale(1.04); }
+.mc-page .product-card .shine { display: none; }
+.mc-page .product-card .info { padding: 16px 18px 20px; }
+.mc-page .product-card h3 {
+    color: var(--mc-navy);
+    font-family: var(--font-body);
+    font-size: 0.92rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+}
+.mc-page .product-card .desc { color: var(--mc-gold-dark); }
+.mc-page .product-card .price {
+    color: var(--mc-navy);
+    font-weight: 700;
+    font-size: 1.02rem;
+}
+
+.mc-page .feature-card:hover,
+.mc-page .ct-channel:hover {
+    border-color: var(--mc-gold);
+    box-shadow: 0 18px 34px rgba(10, 31, 68, 0.14);
+    transform: translateY(-3px);
+}
+
+.mc-page .ct-channel__icono {
+    background: rgba(212, 175, 55, 0.14);
+    color: var(--mc-gold-dark);
+}
+.mc-page .ct-channel__label { color: rgba(10, 31, 68, 0.72); }
+.mc-page .ct-channel__valor { color: var(--mc-navy); }
+
+.mc-page .form-control {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(212, 175, 55, 0.45) !important;
+    border-radius: 8px;
+    color: var(--mc-navy) !important;
+}
+.mc-page .form-control:focus {
+    border-color: var(--mc-gold) !important;
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.18);
+}
+.mc-page .ct-label { color: var(--mc-navy); }
+
+/* Acordeón FAQ */
+.mc-page .acordeon-faq .accordion-item {
+    background: #FFFFFF;
+    border: 1px solid rgba(212, 175, 55, 0.5);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+.mc-page .acordeon-faq .accordion-button {
+    background: #FFFFFF;
+    color: var(--mc-navy);
+    font-family: var(--font-body);
+    font-weight: 600;
+}
+.mc-page .acordeon-faq .accordion-button:not(.collapsed) {
+    background: rgba(212, 175, 55, 0.12);
+    color: var(--mc-navy);
+}
+.mc-page .acordeon-faq .accordion-button:focus { box-shadow: none; }
+.mc-page .acordeon-faq .accordion-body { color: rgba(10, 31, 68, 0.72); }
+
+/* Miniaturas de colección */
+.mc-page .col-mini a { border: 1.5px solid rgba(212, 175, 55, 0.6); background: var(--mc-cream); }
+.mc-page .col-mini a:hover { border-color: var(--mc-gold); }
+.mc-page .col-panel__chip {
+    letter-spacing: 0.16em;
+    color: var(--mc-gold-dark);
+    background: rgba(212, 175, 55, 0.12);
+    border: 1px solid rgba(212, 175, 55, 0.45);
+}
+
+/* ---------- Espaciado: sin header fijo ---------- */
+.mc-page .container { max-width: 1200px; }
+.mc-page main.container,
+.mc-page body > .container { padding-top: 34px !important; }
+
+.mc-page main { position: relative; z-index: 1; }
+
+/* ---------- Banda dorada de cierre (como el pie del flyer) ---------- */
+.mc-band {
+    position: relative;
+    z-index: 10;
+    padding: 34px 20px 32px;
+    text-align: center;
+    color: var(--mc-navy);
+    background: linear-gradient(100deg, #C6A02E 0%, #E7CE7E 46%, #D4AF37 100%);
+    border-top: 1px solid rgba(255, 255, 255, 0.55);
+}
+
+.mc-band__title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(1.15rem, 2.4vw, 1.6rem);
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--mc-navy);
+}
+
+.mc-band__trust {
+    margin: 9px 0 0;
+    font-family: var(--font-body);
+    font-size: 0.64rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(10, 31, 68, 0.75);
+}
+
+.mc-band__icons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 26px;
+    margin: 16px 0 18px;
+    color: rgba(10, 31, 68, 0.8);
+}
+
+.mc-band__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 13px 30px;
+    background: rgba(10, 31, 68, 0.06);
+    border: 1px solid rgba(10, 31, 68, 0.5);
+    border-radius: 999px;
+    color: var(--mc-navy);
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+}
+.mc-band__cta:hover {
+    background: var(--mc-navy);
+    color: var(--mc-gold);
+    box-shadow: 0 12px 26px rgba(10, 31, 68, 0.3);
+}
+
+@media (max-width: 640px) {
+    .mc-band__icons { gap: 18px; }
+    .mc-band__trust { letter-spacing: 0.08em; }
+}
+
+/* ---------- Footer navy ---------- */
+.mc-page .footer-navy {
+    background: var(--mc-navy);
+    color: rgba(245, 241, 232, 0.84);
+}
+.mc-page .footer-navy__titulo { color: var(--mc-cream); }
+.mc-page .footer-navy__link { color: rgba(245, 241, 232, 0.82); }
+.mc-page .footer-navy__link:hover { color: var(--mc-gold); }
+.mc-page .footer-navy__separador { background: rgba(212, 175, 55, 0.4); }
+
+@media (prefers-reduced-motion: reduce) {
+    .mc-page .product-card,
+    .mc-page .btn-primary,
+    .mc-page .mc-band__cta { transition: none; }
+}
+
+/* ---------- Ajustes finos para celular ---------- */
+@media (max-width: 640px) {
+    .mc-page .container-inner { padding: 0 16px; }
+
+    /* Cards del catálogo: menos relleno para que respiren en 2 columnas. */
+    .mc-page .product-card .info { padding: 12px 12px 16px; }
+    .mc-page .product-card h3 { font-size: 0.84rem; }
+    .mc-page .product-card .desc { font-size: 0.68rem; }
+    .mc-page .product-card .price { font-size: 0.95rem; }
+
+    /* Botones de acción a ancho completo, más cómodos para el pulgar. */
+    .mc-page main .btn-gold,
+    .mc-page main .btn-primary,
+    .mc-page main .btn-outline {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .mc-page #catsBar .chip { height: 34px; padding: 0 14px; font-size: 0.64rem; }
+}

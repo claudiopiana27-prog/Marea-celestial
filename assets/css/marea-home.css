@@ -14,7 +14,7 @@ body.mc-home {
     --mc-gold: #D4AF37;
     --mc-turq: #00B4D8;
     --mc-cream: #F5F1E8;
-    --mc-gold-dark: #8A6A1F;
+    --mc-gold-dark: #7A5C18;
 
     /* Remapeo del design system para que todo lo compartido
        (cards, footer, carrito) use la paleta del manual. */
@@ -180,15 +180,28 @@ body.mc-home h4 {
 .mc-nav__list {
     list-style: none;
     margin: 0;
-    padding: 15px 20px;
+    padding: 13px 20px;
     display: flex;
     justify-content: center;
     align-items: center;
     gap: clamp(14px, 3.4vw, 42px);
     overflow-x: auto;
     scrollbar-width: none;
+    scroll-padding-inline: 16px;
+    -webkit-overflow-scrolling: touch;
 }
 .mc-nav__list::-webkit-scrollbar { display: none; }
+
+/* En pantallas chicas el menú se recorre desde el inicio, no centrado. */
+@media (max-width: 900px) {
+    .mc-nav__list {
+        justify-content: flex-start;
+        gap: 20px;
+        padding: 12px 16px;
+    }
+    .mc-nav__link { font-size: 0.74rem; letter-spacing: 1.1px; }
+    .mc-nav__cta { margin-left: 0; padding: 8px 16px; font-size: 0.64rem; }
+}
 
 .mc-nav__link {
     display: inline-block;
@@ -206,10 +219,10 @@ body.mc-home h4 {
 }
 
 .mc-nav__link:hover,
-.mc-nav__link:focus-visible { color: var(--mc-gold); border-bottom-color: var(--mc-gold); }
+.mc-nav__link:focus-visible { color: var(--mc-gold-dark); border-bottom-color: var(--mc-gold); }
 
 .mc-nav__link.is-active {
-    color: var(--mc-gold);
+    color: var(--mc-gold-dark);
     font-weight: 700;
     border-bottom-color: var(--mc-gold);
 }
@@ -221,6 +234,24 @@ body.mc-home h4 {
     grid-template-columns: 460px minmax(0, 1fr);
     min-height: 650px;
     background: var(--mc-cream);
+}
+
+@media (max-width: 1100px) {
+    .mc-hero {
+        grid-template-columns: minmax(0, 1fr);
+        min-height: 0;
+    }
+    .mc-hero__left {
+        padding: 46px 30px 110px;
+    }
+    .mc-hero__moon {
+        top: 12px;
+        right: -14px;
+    }
+}
+
+@media (max-width: 640px) {
+    .mc-hero__left { padding: 40px 22px 80px; }
 }
 
 .mc-hero__left {
@@ -368,22 +399,28 @@ body.mc-home h4 {
     position: relative;
     z-index: 2;
     margin: 0;
-    width: min(100%, 442px);
-    aspect-ratio: 4 / 5;
+    max-width: min(100%, 442px);
+    width: 100%;
+    aspect-ratio: auto;
     padding: 7px;
     background: rgba(245, 241, 232, 0.06);
     border: 1px solid var(--mc-gold);
     border-radius: 12px;
     box-shadow: 0 26px 54px rgba(0, 0, 0, 0.42);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.mc-hero__photo {
+.mc-hero__figure img {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center 86%;
+    height: auto;
+    max-width: 100%;
+    object-fit: contain;
+    object-position: center;
     display: block;
     border-radius: 7px;
+    margin: auto;
 }
 
 .mc-hero__bags {
@@ -472,10 +509,16 @@ body.mc-home h4 {
 }
 
 @media (max-width: 560px) {
-    .mc-hero__left { padding: 44px 22px 84px; }
-    .mc-hero__right { padding: 28px 18px 96px; }
-    .mc-hero__figure { width: min(100%, 340px); }
-    .mc-hero__bags { left: 14px; right: 14px; bottom: 76px; gap: 8px; }
+    .mc-hero__left { padding: 40px 22px 72px; }
+    .mc-hero__right { padding: 24px 18px 52px; flex-direction: column; gap: 0; }
+    .mc-hero__figure { width: 100%; max-width: 340px; }
+    /* Las miniaturas dejan de flotar sobre la foto: van debajo, más prolijas. */
+    .mc-hero__bags {
+        position: static;
+        margin: 18px auto 0;
+        gap: 8px;
+        max-width: 340px;
+    }
     .mc-hero__bag { width: 46px; height: 46px; }
     .mc-hero__bags-copy strong { font-size: 0.86rem; }
     .mc-hero__bags-copy span { font-size: 0.5rem; letter-spacing: 0.12em; }
@@ -537,7 +580,7 @@ body.mc-home h4 {
     font-weight: 500;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: var(--mc-turq);
+    color: var(--mc-gold-dark);
 }
 
 .mc-coleccion__sub .mc-moon { color: var(--mc-gold); font-size: 0.9rem; line-height: 1; }

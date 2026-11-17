@@ -22,9 +22,9 @@ try {
 }
 
 $acentos = [
-    "Bolsos"    => ["color" => "#6bb3c7", "icono" => "👜", "lema" => "Amplios, cómodos y con actitud para tu día a día."],
-    "Carteras"  => ["color" => "#8fa8bf", "icono" => "👛", "lema" => "La pieza esencial que combina con todo."],
-    "Monederos" => ["color" => "#c9a84c", "icono" => "👝", "lema" => "Pequeños y prácticos, con el brillo justo."],
+    "Bolsos"    => ["icono" => "👜", "lema" => "Amplios, cómodos y con actitud para tu día a día."],
+    "Carteras"  => ["icono" => "👛", "lema" => "La pieza esencial que combina con todo."],
+    "Monederos" => ["icono" => "👝", "lema" => "Pequeños y prácticos, con el brillo justo."],
 ];
 
 $mc_titulo      = "Colecciones | Marea Celestial";
@@ -36,7 +36,6 @@ $mc_pagina      = "colecciones";
 ob_start();
 ?>
 <style>
-    body { padding-top: 72px; }
     .col-hero { text-align: center; padding: var(--space-10) var(--space-4) var(--space-6); }
     .col-hero__titulo { font-family: var(--font-display); font-weight: 700; color: var(--color-primary); font-size: clamp(1.8rem, 4vw, 2.8rem); margin: 0; }
     .col-panel {
@@ -57,12 +56,19 @@ ob_start();
     .col-mini a { width: 74px; height: 74px; border-radius: var(--radius-lg); overflow: hidden; border: 1.5px solid var(--border); transition: border-color var(--dur-base); background: var(--bg-elevated); }
     .col-mini a:hover { border-color: var(--gold); }
     .col-mini img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    @media (max-width: 575px) {
+        .col-panel__body { padding: 24px 18px; }
+        .col-panel__media img { min-height: 210px; }
+        .col-mini a { width: 60px; height: 60px; }
+    }
 </style>
 <?php
 $mc_head_extra = ob_get_clean();
 require_once "partials/header.php";
 ?>
 
+    <main>
     <section class="col-hero">
         <span class="badge badge-gold mb-3 d-inline-block">✦ Colecciones curadas ✦</span>
         <h1 class="col-hero__titulo"><span class="text-gradient-celestial">Nuestras colecciones</span></h1>
@@ -75,7 +81,7 @@ require_once "partials/header.php";
         <?php if ($colecciones): ?>
             <?php foreach ($colecciones as $i => $col):
                 $nombre = $col["categoria"];
-                $acc = $acentos[$nombre] ?? ["color" => "#6bb3c7", "icono" => "✦", "lema" => "Diseños pensados para acompañarte."];
+                $acc = $acentos[$nombre] ?? ["icono" => "✦", "lema" => "Diseños pensados para acompañarte."];
                 $portada = $col["productos"][0]["imagen"] ?? "";
                 $invertido = ($i % 2 === 1);
             ?>
@@ -89,7 +95,7 @@ require_once "partials/header.php";
                     </div>
                     <div class="col-12 col-lg-7">
                         <div class="col-panel__body">
-                            <span class="col-panel__chip" style="background:<?= $acc['color'] ?>22;color:<?= $acc['color'] ?>">
+                            <span class="col-panel__chip">
                                 <span aria-hidden="true"><?= $acc['icono'] ?></span> Colección
                             </span>
                             <h2 class="col-panel__titulo"><?= htmlspecialchars($nombre) ?></h2>
@@ -107,9 +113,8 @@ require_once "partials/header.php";
                             <?php endif; ?>
 
                             <div class="d-flex flex-wrap align-items-center gap-3 mt-2">
-                                <a href="productos.php?id=<?= (int)$col["id"] ?>" class="btn btn-primary"
-                                   style="background:<?= $acc['color'] ?>;border-color:<?= $acc['color'] ?>">
-                                    Ver <?= (int)$col["total"] ?> <?= $nombre === "Monederos" ? 'productos' : 'productos' ?>
+                                <a href="productos.php?id=<?= (int)$col["id"] ?>" class="btn btn-primary">
+                                    Ver <?= (int)$col["total"] ?> <?= (int)$col["total"] === 1 ? 'producto' : 'productos' ?>
                                 </a>
                                 <a href="contacto.php" class="btn btn-outline">Consultar</a>
                             </div>
@@ -122,5 +127,6 @@ require_once "partials/header.php";
             <p class="text-center text-fg-muted py-10">No hay colecciones disponibles por el momento.</p>
         <?php endif; ?>
     </div>
+    </main>
 
 <?php require_once "partials/footer.php"; ?>

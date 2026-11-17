@@ -26,13 +26,18 @@ ob_start();
     .acordeon-faq .accordion-button:focus { box-shadow: none; }
     .acordeon-faq .accordion-body { color: var(--fg-muted); }
     .acordeon-faq .accordion-item { border: 1px solid var(--border); background: var(--bg-elevated); }
+
+    @media (max-width: 575px) {
+        .feature-card { padding: 20px 16px; }
+        .glass-strong.rounded-3xl { padding: 24px 18px !important; }
+    }
 </style>
 <?php
 $mc_head_extra = ob_get_clean();
 require_once "partials/header.php";
 ?>
 
-    <main class="container" style="padding-top:140px;padding-bottom:100px">
+    <main class="container" style="padding-bottom:100px">
         <nav aria-label="breadcrumb" class="text-sm mb-4" style="color:var(--fg-subtle)">
             <a href="index.php" style="color:var(--gold-dark);text-decoration:none">Inicio</a>
             <span style="color:var(--fg-subtle)"> › </span>
@@ -55,28 +60,28 @@ require_once "partials/header.php";
             <div class="col-12 col-md-6 col-lg-3">
                 <div class="feature-card">
                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="mb-3" style="color:var(--gold)"><path d="M20 7L9 18l-5-5"></path></svg>
-                    <h3 class="display-card mb-2" style="color:var(--fg)">Calidad real</h3>
+                    <h2 class="display-card mb-2" style="color:var(--fg)">Calidad real</h2>
                     <p class="small text-fg-muted mb-0">Ecocuero grueso, costuras reforzadas y herrajes que duran en el tiempo.</p>
                 </div>
             </div>
             <div class="col-12 col-md-6 col-lg-3">
                 <div class="feature-card">
                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="mb-3" style="color:var(--gold)"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                    <h3 class="display-card mb-2" style="color:var(--fg)">Atención personal</h3>
+                    <h2 class="display-card mb-2" style="color:var(--fg)">Atención personal</h2>
                     <p class="small text-fg-muted mb-0">Te respondemos por WhatsApp para asesorarte con tu pedido.</p>
                 </div>
             </div>
             <div class="col-12 col-md-6 col-lg-3">
                 <div class="feature-card">
                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="mb-3" style="color:var(--gold)"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
-                    <h3 class="display-card mb-2" style="color:var(--fg)">Envíos al país</h3>
+                    <h2 class="display-card mb-2" style="color:var(--fg)">Envíos al país</h2>
                     <p class="small text-fg-muted mb-0">Despachamos a todo el territorio nacional con seguimiento.</p>
                 </div>
             </div>
             <div class="col-12 col-md-6 col-lg-3">
                 <div class="feature-card">
                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="mb-3" style="color:var(--gold)"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-                    <h3 class="display-card mb-2" style="color:var(--fg)">Compra segura</h3>
+                    <h2 class="display-card mb-2" style="color:var(--fg)">Compra segura</h2>
                     <p class="small text-fg-muted mb-0">Pedís en 2 minutos y coordinamos todo por WhatsApp.</p>
                 </div>
             </div>
@@ -99,13 +104,13 @@ require_once "partials/header.php";
                     <div class="row g-3">
                         <div class="col-6">
                             <div class="feature-card text-start">
-                                <h3 class="display-card mb-1" style="color:var(--gold)">Mariana Rojas</h3>
+                                <h3 class="display-card mb-1" style="color:var(--gold-dark)">Mariana Rojas</h3>
                                 <p class="small text-fg-muted mb-0">Diseñadora. Cuida cada detalle, color y terminación de las piezas.</p>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="feature-card text-start">
-                                <h3 class="display-card mb-1" style="color:var(--gold)">Diego Morales</h3>
+                                <h3 class="display-card mb-1" style="color:var(--gold-dark)">Diego Morales</h3>
                                 <p class="small text-fg-muted mb-0">Director creativo. Piensa cada colección y la experiencia de compra.</p>
                             </div>
                         </div>
