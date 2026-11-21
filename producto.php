@@ -41,6 +41,7 @@ $mc_pagina      = "productos";
 ob_start();
 ?>
 <style>
+    body { padding-top: 72px; }
     .product-hero {
         position: relative; border-radius: var(--radius-lg); overflow: hidden;
         border: 1.5px solid var(--border); background: var(--bg-card);

@@ -45,6 +45,7 @@ $mc_pagina      = "productos";
 ob_start();
 ?>
 <style>
+    body { padding-top: 72px; }
     .chip {
         text-decoration: none; white-space: nowrap;
         height: 38px; display: inline-flex; align-items: center;
@@ -129,6 +130,7 @@ ob_start();
         cursor: pointer; transition: all var(--dur-fast);
     }
     .qty-btn:hover { border-color: var(--gold); color: var(--gold); background: var(--gold-subtle); }
+    #catsBar { position: sticky; top: 72px; }
 </style>
 <?php
 $mc_head_extra = ob_get_clean();
@@ -142,7 +144,7 @@ require_once "partials/header.php";
             <div class="position-relative flex-grow-1" style="min-width:0">
                 <input type="search" id="buscador" class="form-control" placeholder="Buscar producto (ej: cartera, billetera, tote)"
                        aria-label="Buscar producto" autocomplete="off"
-                       style="border-radius:999px;padding-left:36px">
+                       style="border-radius:var(--radius-full);border:1.5px solid var(--border);background:rgba(255,255,255,0.04);color:var(--fg);font-size:var(--text-sm);padding-left:36px">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                      style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--mc-gold-dark)"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
             </div>
