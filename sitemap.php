@@ -10,9 +10,14 @@ $urls[] = ["$base/nosotros.php", "monthly", 0.6];
 $urls[] = ["$base/contacto.php", "monthly", 0.6];
 try {
     $pdo = conectar();
+    $cats_vistas = [];
     foreach ($pdo->query("SELECT p.id, p.id_categoria FROM productos p INNER JOIN categorias c ON c.id = p.id_categoria ORDER BY p.id") as $pr) {
         $urls[] = ["$base/producto.php?id=" . (int)$pr["id"], "weekly", 0.7];
-        $urls[] = ["$base/productos.php?id=" . (int)$pr["id_categoria"], "weekly", 0.7];
+        $cid = (int)$pr["id_categoria"];
+        if (!isset($cats_vistas[$cid])) {
+            $cats_vistas[$cid] = true;
+            $urls[] = ["$base/productos.php?id=" . $cid, "weekly", 0.7];
+        }
     }
 } catch (Throwable $e) {}
 echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";

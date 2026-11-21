@@ -20,7 +20,23 @@ try {
     $mc_error_bd = $e->getMessage();
 }
 
-$mc_titulo      = "Catálogo | Marea Celestial";
+/* Categoría inexistente: devolver 404 real en vez de un catálogo vacío. */
+if ($id_categoria > 0 && $cats) {
+    $ids_validos = array_map(function ($c) { return (int)$c["id"]; }, $cats);
+    if (!in_array($id_categoria, $ids_validos, true)) {
+        http_response_code(404);
+        require __DIR__ . "/404.php";
+        exit;
+    }
+}
+foreach ($cats as $c) {
+    if ((int)$c["id"] === $id_categoria) {
+        $cat_actual = $c["categoria"];
+        break;
+    }
+}
+
+$mc_titulo      = ($id_categoria > 0 ? $cat_actual : "Catálogo") . " | Marea Celestial";
 $mc_descripcion = "Explorá el catálogo de Marea Celestial: bolsos, carteras y monederos en ecocuero. Comprá directo por WhatsApp.";
 $mc_og_titulo   = "Catálogo | Marea Celestial";
 $mc_og_imagen   = "img/og-image.jpg";
@@ -153,6 +169,9 @@ require_once "partials/header.php";
                 <span style="color:var(--fg)"><?= htmlspecialchars($cat_actual) ?></span>
             <?php endif; ?>
         </nav>
+        <h1 class="display-section mt-2 mb-1" style="color:var(--fg)">
+            <?= htmlspecialchars($id_categoria > 0 ? $cat_actual : "Catálogo") ?>
+        </h1>
         <div class="accent-band" aria-hidden="true"></div>
         <div class="d-flex align-items-center gap-2 mb-2" id="resultadoBusqueda" style="display:none;color:var(--fg-subtle);font-size:var(--text-sm)"></div>
         <div class="row g-3" id="gridProductos">

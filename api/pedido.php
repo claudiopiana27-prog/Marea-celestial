@@ -1,6 +1,32 @@
 <?php
 require_once dirname(__DIR__) . "/config.php";
 
+/* Límite anti-spam: 8 pedidos por IP cada 10 minutos. */
+function limitar_pedidos(int $maximo = 8, int $ventana = 600): void
+{
+    $ip = $_SERVER["REMOTE_ADDR"] ?? "desconocida";
+    $dir = rtrim(sys_get_temp_dir(), "/\\") . DIRECTORY_SEPARATOR . "mc_rl";
+    if (!is_dir($dir) && !@mkdir($dir, 0700, true) && !is_dir($dir)) {
+        return; // Si no se puede escribir, no bloqueamos ventas legítimas.
+    }
+    $archivo = $dir . DIRECTORY_SEPARATOR . hash("sha256", $ip) . ".json";
+    $ahora = time();
+    $marcas = [];
+    if (is_file($archivo)) {
+        $previas = json_decode((string)@file_get_contents($archivo), true);
+        if (is_array($previas)) {
+            $marcas = array_values(array_filter($previas, function ($t) use ($ahora, $ventana) {
+                return is_int($t) && ($ahora - $t) < $ventana;
+            }));
+        }
+    }
+    if (count($marcas) >= $maximo) {
+        json_response(["ok" => false, "error" => "Recibimos varios pedidos seguidos. Esperá unos minutos o escribinos por WhatsApp."], 429);
+    }
+    $marcas[] = $ahora;
+    @file_put_contents($archivo, json_encode($marcas), LOCK_EX);
+}
+
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     json_response(["ok" => false, "error" => "Método no permitido"], 405);
 }
@@ -31,6 +57,8 @@ if (!is_array($items) || count($items) === 0) {
 if (count($items) > 30) {
     json_response(["ok" => false, "error" => "El carrito tiene demasiados productos distintos."], 400);
 }
+
+limitar_pedidos();
 
 /* Normalizar items: agrupar cantidades por producto y validar rangos. */
 $pedido_items = [];

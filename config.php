@@ -1,4 +1,13 @@
 <?php
+/* En producción no mostrar errores al visitante; en local sí, para depurar. */
+$mc_host_actual = strtolower((string)($_SERVER["HTTP_HOST"] ?? ""));
+$mc_host_actual = trim((string)preg_replace('/:\d+$/', '', $mc_host_actual), "[]");
+if ($mc_host_actual !== "" && !in_array($mc_host_actual, ["localhost", "127.0.0.1", "::1"], true)) {
+    ini_set("display_errors", "0");
+    ini_set("display_startup_errors", "0");
+    ini_set("log_errors", "1");
+}
+
 /* Sesión con cookies endurecidas (HttpOnly + SameSite). */
 if (session_status() === PHP_SESSION_NONE) {
     $mc_https = (!empty($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] !== "off")

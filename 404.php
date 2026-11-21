@@ -1,12 +1,15 @@
 <?php
-require_once "config.php";
+require_once __DIR__ . "/config.php";
 http_response_code(404);
 
 $mc_titulo = "Página no encontrada | Marea Celestial";
 $mc_descripcion = "La página que buscás no existe o cambió de dirección. Volvé al catálogo de Marea Celestial.";
 $mc_pagina = "";
+$mc_canonical = "";
+$mc_og_url = "";
+$mc_head_extra = '<meta name="robots" content="noindex, follow">';
 
-require_once "partials/header.php";
+require_once __DIR__ . "/partials/header.php";
 ?>
 <main class="container py-5">
     <div class="row justify-content-center text-center">
@@ -25,4 +28,4 @@ require_once "partials/header.php";
         </div>
     </div>
 </main>
-<?php require_once "partials/footer.php"; ?>
+<?php require_once __DIR__ . "/partials/footer.php"; ?>

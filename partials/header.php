@@ -51,7 +51,7 @@ if ($mc_ver === "0") { $mc_ver = "1"; }
     <link rel="icon" type="image/png" sizes="192x192" href="img/favicon-192.png">
     <link rel="apple-touch-icon" href="img/favicon-192.png">
     <link rel="manifest" href="manifest.webmanifest">
-    <link rel="canonical" href="<?= htmlspecialchars($mc_canonical) ?>">
+    <?php if ($mc_canonical !== ""): ?><link rel="canonical" href="<?= htmlspecialchars($mc_canonical) ?>"><?php endif; ?>
     <meta property="og:type" content="<?= htmlspecialchars($mc_og_tipo) ?>">
     <meta property="og:site_name" content="Marea Celestial">
     <meta property="og:title" content="<?= htmlspecialchars($mc_og_titulo) ?>">
