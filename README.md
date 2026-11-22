@@ -24,6 +24,11 @@ Si Apache no está corriendo, el `.bat` avisa y no abre el navegador.
 - `catalogo.sql`: esquema y datos iniciales de MySQL.
 - `html/`: exportación HTML estática (se abre con `abrir-sitio.bat estatico`).
 - `maquetas/`: HTML originales de diseño; **no se sirven** desde Apache.
+- `docs/`: documentación del repo; abrir `docs/resumen-proyecto.html` para el mapa completo por carpeta y archivo.
+
+## Mapa técnico del repositorio
+
+`docs/resumen-proyecto.html` resume el propósito de Marea Celestial, el rol de cada carpeta y qué hace cada archivo conservado, con sus dependencias y reglas de mantenimiento. Abrilo en el navegador o publicá `docs/` con GitHub Pages para verlo como página (GitHub muestra el HTML como código fuente).
 
 ## Configuración
 
