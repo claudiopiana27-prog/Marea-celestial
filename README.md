@@ -13,3 +13,19 @@ El sitio real corre con Apache + MySQL de XAMPP (no usa `php artisan serve`).
 
 Si Apache no está corriendo, el `.bat` avisa y no abre el navegador.
 
+## Estructura del repo
+
+- **Raíz:** aplicación PHP real (`index.php`, `productos.php`, `producto.php`, etc.).
+- `admin/`: panel de administración.
+- `api/`: endpoints JSON (catálogo y pedidos).
+- `partials/`: header, footer y carrito compartidos.
+- `assets/`: CSS y JS del sitio.
+- `img/`: imágenes del catálogo, promociones y fuentes para importar.
+- `catalogo.sql`: esquema y datos iniciales de MySQL.
+- `html/`: exportación HTML estática (se abre con `abrir-sitio.bat estatico`).
+- `maquetas/`: HTML originales de diseño; **no se sirven** desde Apache.
+
+## Configuración
+
+La conexión a MySQL y el número de WhatsApp están definidos en `config.php`.
+No subir credenciales reales: `.env` y `.env.*` están ignorados por Git.
