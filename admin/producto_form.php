@@ -40,6 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if ($id_categoria <= 0) { $errores[] = "Elegí una categoría."; }
 
     $nueva_ruta = $imagen_actual;
+    $ruta_destino = null;
 
     if ($subir && !empty($subir["name"])) {
         if ($subir["error"] !== UPLOAD_ERR_OK) {
@@ -57,36 +58,49 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $dir_dest = dirname(__DIR__) . "/img";
                 if (!is_dir($dir_dest)) { mkdir($dir_dest, 0777, true); }
                 $archivo = "producto_" . time() . "_" . bin2hex(random_bytes(4)) . "." . $ext;
-                if (move_uploaded_file($subir["tmp_name"], $dir_dest . "/" . $archivo)) {
-                    if ($imagen_actual !== "" && str_starts_with($imagen_actual, "img/")) {
-                        $stmt_img = $pdo->prepare("SELECT COUNT(*) FROM productos WHERE imagen = ? AND id <> ?");
-                        $stmt_img->execute([$imagen_actual, $id]);
-                        if ((int)$stmt_img->fetchColumn() === 0) {
-                            $vieja = dirname(__DIR__) . "/" . $imagen_actual;
-                            if (is_file($vieja)) { @unlink($vieja); }
-                        }
-                    }
-                    $nueva_ruta = "img/" . $archivo;
-                } else {
-                    $errores[] = "No se pudo guardar la imagen.";
-                }
+                $ruta_destino = $dir_dest . "/" . $archivo;
+                $nueva_ruta = "img/" . $archivo;
             }
         }
     }
 
     if (count($errores) === 0) {
-        $precio_numerico = (float)str_replace(",", ".", $precio_input);
-        if ($id > 0) {
-            $stmt = $pdo->prepare("UPDATE productos SET id_categoria=?, producto=?, precio=?, descripcion=?, imagen=?, stock=? WHERE id=?");
-            $stmt->execute([$id_categoria, $nombre, $precio_numerico, $descripcion, $nueva_ruta, $stock, $id]);
-            $msg = "Producto actualizado correctamente.";
-        } else {
-            $stmt = $pdo->prepare("INSERT INTO productos (id_categoria, producto, precio, descripcion, imagen, stock) VALUES (?, ?, ?, ?, ?, ?)");
-            $stmt->execute([$id_categoria, $nombre, $precio_numerico, $descripcion, $nueva_ruta, $stock]);
-            $msg = "Producto creado correctamente.";
+        try {
+            if ($ruta_destino !== null && !move_uploaded_file($subir["tmp_name"], $ruta_destino)) {
+                throw new RuntimeException("No se pudo guardar la imagen.");
+            }
+
+            $precio_numerico = (float)str_replace(",", ".", $precio_input);
+            if ($id > 0) {
+                $stmt = $pdo->prepare("UPDATE productos SET id_categoria=?, producto=?, precio=?, descripcion=?, imagen=?, stock=? WHERE id=?");
+                $stmt->execute([$id_categoria, $nombre, $precio_numerico, $descripcion, $nueva_ruta, $stock, $id]);
+                $msg = "Producto actualizado correctamente.";
+            } else {
+                $stmt = $pdo->prepare("INSERT INTO productos (id_categoria, producto, precio, descripcion, imagen, stock) VALUES (?, ?, ?, ?, ?, ?)");
+                $stmt->execute([$id_categoria, $nombre, $precio_numerico, $descripcion, $nueva_ruta, $stock]);
+                $msg = "Producto creado correctamente.";
+            }
+
+            if ($ruta_destino !== null && $imagen_actual !== "" && str_starts_with($imagen_actual, "img/")) {
+                $stmt_img = $pdo->prepare("SELECT COUNT(*) FROM productos WHERE imagen = ? AND id <> ?");
+                $stmt_img->execute([$imagen_actual, $id]);
+                if ((int)$stmt_img->fetchColumn() === 0) {
+                    $vieja = dirname(__DIR__) . "/" . $imagen_actual;
+                    if (is_file($vieja)) { @unlink($vieja); }
+                }
+            }
+
+            $_SESSION["flash"] = $msg;
+            redirigir("productos.php");
+        } catch (Throwable $e) {
+            if ($ruta_destino !== null && is_file($ruta_destino)) {
+                @unlink($ruta_destino);
+            }
+            error_log("MC producto_form: " . $e->getMessage());
+            $errores[] = $e->getMessage() === "No se pudo guardar la imagen."
+                ? $e->getMessage()
+                : "No se pudo guardar el producto. Intentá de nuevo.";
         }
-        $_SESSION["flash"] = $msg;
-        redirigir("productos.php");
     }
 }
 

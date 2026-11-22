@@ -153,22 +153,25 @@ try {
         "mercadopago" => "MercadoPago",
     ][$metodo_pago];
 
-    $mensaje_pedido = "Hola, quiero pedir:%0A";
+    $lineas_mensaje = ["Hola, quiero pedir:"];
     foreach ($detalles as $d) {
-        $mensaje_pedido .= "- " . $d["producto_nombre"] . " x" . $d["cantidad"]
-            . " = " . precio_ar($d["subtotal"]) . "%0A";
+        $lineas_mensaje[] = "- " . $d["producto_nombre"] . " x" . $d["cantidad"]
+            . " = " . precio_ar($d["subtotal"]);
     }
     if (WHATSAPP !== "") {
-        $mensaje_pedido .= "%0ATotal: " . precio_ar($total);
-        $mensaje_pedido .= "%0APago: " . $etiqueta_metodo;
+        $lineas_mensaje[] = "";
+        $lineas_mensaje[] = "Total: " . precio_ar($total);
+        $lineas_mensaje[] = "Pago: " . $etiqueta_metodo;
         if ($mensaje !== "") {
-            $mensaje_pedido .= "%0A" . $mensaje;
+            $lineas_mensaje[] = $mensaje;
         }
-        $mensaje_pedido .= "%0ANombre: " . rawurlencode($nombre) . "%0ATeléfono: " . rawurlencode($telefono);
+        $lineas_mensaje[] = "Nombre: " . $nombre;
+        $lineas_mensaje[] = "Teléfono: " . $telefono;
         if ($localidad !== "") {
-            $mensaje_pedido .= "%0ALocalidad: " . rawurlencode($localidad);
+            $lineas_mensaje[] = "Localidad: " . $localidad;
         }
     }
+    $mensaje_pedido = implode("\n", $lineas_mensaje);
 
     /* El metodo de pago se antepone al mensaje para que quede registrado en la BD. */
     $mensaje_registrado = "[Pago: " . $etiqueta_metodo . "] " . $mensaje;
@@ -197,7 +200,7 @@ try {
     $pdo->commit();
 
     $link = (WHATSAPP !== "")
-        ? "https://wa.me/" . preg_replace("/\D/", "", WHATSAPP) . "?text=" . $mensaje_pedido
+        ? "https://wa.me/" . preg_replace("/\D/", "", WHATSAPP) . "?text=" . rawurlencode($mensaje_pedido)
         : null;
 
     json_response([

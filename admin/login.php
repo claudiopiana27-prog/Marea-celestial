@@ -6,8 +6,44 @@ if (!empty($_SESSION["admin_id"])) {
 }
 
 $error = "";
-$intentos = $_SESSION["login_intentos"] ?? ["n" => 0, "ts" => 0];
-$bloqueado = $intentos["n"] >= 5 && (time() - (int)$intentos["ts"]) < 900;
+
+/* Bloqueo por IP, no por sesión: borrar la cookie no resetea los intentos. */
+function archivo_intentos_login(): string
+{
+    $dir = rtrim(sys_get_temp_dir(), "/\\") . DIRECTORY_SEPARATOR . "mc_login_rl";
+    if (!is_dir($dir) && !@mkdir($dir, 0700, true) && !is_dir($dir)) {
+        return "";
+    }
+    $ip = $_SERVER["REMOTE_ADDR"] ?? "desconocida";
+    return $dir . DIRECTORY_SEPARATOR . hash("sha256", $ip) . ".json";
+}
+
+function leer_intentos_login(string $archivo, int $ventana): array
+{
+    $ahora = time();
+    if ($archivo === "" || !is_file($archivo)) {
+        return [];
+    }
+    $datos = json_decode((string)@file_get_contents($archivo), true);
+    if (!is_array($datos)) {
+        return [];
+    }
+    return array_values(array_filter($datos, function ($t) use ($ahora, $ventana) {
+        return is_int($t) && ($ahora - $t) < $ventana;
+    }));
+}
+
+function guardar_intentos_login(string $archivo, array $marcas): void
+{
+    if ($archivo !== "") {
+        @file_put_contents($archivo, json_encode($marcas), LOCK_EX);
+    }
+}
+
+$ventana_login = 900;
+$archivo_intentos = archivo_intentos_login();
+$intentos = leer_intentos_login($archivo_intentos, $ventana_login);
+$bloqueado = count($intentos) >= 5;
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     csrf_requerir();
@@ -26,15 +62,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $admin = $stmt->fetch();
 
                 if ($admin && password_verify($password, $admin["password"])) {
-                    unset($_SESSION["login_intentos"]);
+                    guardar_intentos_login($archivo_intentos, []);
                     session_regenerate_id(true);
                     $_SESSION["admin_id"] = (int)$admin["id"];
                     $_SESSION["admin_usuario"] = $admin["usuario"];
                     redirigir("index.php");
                 } else {
                     usleep(400000);
-                    $_SESSION["login_intentos"] = ["n" => (int)$intentos["n"] + 1, "ts" => time()];
-                    $restantes = max(0, 5 - ((int)$intentos["n"] + 1));
+                    $intentos[] = time();
+                    guardar_intentos_login($archivo_intentos, $intentos);
+                    $restantes = max(0, 5 - count($intentos));
                     $error = "Usuario o contraseña incorrectos."
                         . ($restantes > 0 ? " Te quedan $restantes intento(s)." : " Cuenta bloqueada por 15 minutos.");
                 }

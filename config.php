@@ -140,9 +140,12 @@ function redirigir(string $url): void
     exit;
 }
 
-function limpiar(string $valor): string
+function limpiar(mixed $valor): string
 {
-    return trim(strip_tags($valor));
+    if (!is_scalar($valor)) {
+        return "";
+    }
+    return trim(strip_tags((string)$valor));
 }
 
 function requiere_login(): void

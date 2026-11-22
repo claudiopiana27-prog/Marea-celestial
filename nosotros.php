@@ -168,7 +168,7 @@ require_once "partials/header.php";
                         <div class="accordion-body">Sí, enviamos a todo el territorio argentino. Consultanos el costo según tu localidad y preferencia.</div>
                     </div>
                 </div>
-                <div class="accordion-item">
+                <div class="accordion-item" id="cambios">
                     <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#f4">¿Puedo cambiar o devolver un producto?</button></h2>
                     <div id="f4" class="accordion-collapse collapse" data-bs-parent="#faqAcc">
                         <div class="accordion-body">Aceptamos cambios por falla de fábrica dentro de los primeros días de recibido el producto, siempre que conserve su estado original. Coordinalo por WhatsApp.</div>
@@ -185,3 +185,14 @@ require_once "partials/header.php";
     </main>
 
 <?php require_once "partials/footer.php"; ?>
+<script>
+    // El enlace "Cambios y devoluciones" apunta a #cambios: abrimos ese item del acordeón.
+    if (window.location.hash === "#cambios" && window.bootstrap) {
+        var collapses = document.querySelectorAll("#cambios .accordion-collapse");
+        collapses.forEach(function (el) {
+            if (!el.classList.contains("show")) {
+                new bootstrap.Collapse(el, { toggle: true });
+            }
+        });
+    }
+</script>
