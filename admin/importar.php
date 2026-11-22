@@ -74,6 +74,24 @@ function resolver_imagen(string $token, string $raiz, string $sku): array
         return [null, $avisos];
     }
 
+    /* Nunca aceptar rutas relativas hacia afuera de img/ ni bytes de control. */
+    if (preg_match('/[\x00-\x1F\x7F]/', $token) || preg_match('~(^|/)\.\.(/|$)~', $token)) {
+        $avisos[] = "La ruta de imagen indicada no es valida.";
+        return [null, $avisos];
+    }
+
+    $dir_img = realpath($raiz . "/img");
+    $extensiones = ["jpg", "jpeg", "png", "webp"];
+    $es_imagen = static function (string $ruta) use ($dir_img, $extensiones): bool {
+        if ($dir_img === false || !in_array(strtolower(pathinfo($ruta, PATHINFO_EXTENSION)), $extensiones, true)) {
+            return false;
+        }
+        $real = realpath($ruta);
+        return $real !== false
+            && str_starts_with($real, $dir_img . DIRECTORY_SEPARATOR)
+            && is_file($real);
+    };
+
     $candidatas = [];
     if (stripos($token, "img/") === 0) {
         $candidatas[] = $token;
@@ -85,15 +103,15 @@ function resolver_imagen(string $token, string $raiz, string $sku): array
 
     $base = pathinfo($token, PATHINFO_FILENAME);
     $ext = strtolower(pathinfo($token, PATHINFO_EXTENSION));
-    if ($ext === "" || strlen($ext) > 4) {
-        foreach (["jpg", "jpeg", "png", "webp"] as $e) {
+    if ($ext === "" || !in_array($ext, $extensiones, true)) {
+        foreach ($extensiones as $e) {
             $candidatas[] = "img/catalogo/" . $base . "." . $e;
             $candidatas[] = "img/fuentes/" . $base . "." . $e;
         }
     }
 
     foreach ($candidatas as $c) {
-        if (is_file($raiz . "/" . $c)) {
+        if ($es_imagen($raiz . "/" . $c)) {
             return [$c, $avisos];
         }
     }
@@ -102,7 +120,7 @@ function resolver_imagen(string $token, string $raiz, string $sku): array
     if ($aguja !== "" && is_dir($raiz . "/img/catalogo")) {
         $archivos = glob($raiz . "/img/catalogo/*") ?: [];
         foreach ($archivos as $archivo) {
-            if (is_file($archivo) && str_contains(str_replace("-", "", strtolower(basename($archivo))), $aguja)) {
+            if ($es_imagen($archivo) && str_contains(str_replace("-", "", strtolower(basename($archivo))), $aguja)) {
                 return ["img/catalogo/" . basename($archivo), $avisos];
             }
         }
@@ -437,7 +455,11 @@ function restaurar_respaldo(PDO $pdo, string $dir, string $archivo): array
         return ["ok" => false, "mensaje" => "No se encontro el respaldo " . basename($archivo) . "."];
     }
     $datos = json_decode(file_get_contents($ruta), true);
-    if (!is_array($datos) || !isset($datos["productos"])) {
+    if (!is_array($datos) || !isset($datos["productos"]) || !is_array($datos["productos"])) {
+        return ["ok" => false, "mensaje" => "El respaldo esta corrupto o tiene otro formato."];
+    }
+    $categorias_respaldo = $datos["categorias"] ?? [];
+    if (!is_array($categorias_respaldo)) {
         return ["ok" => false, "mensaje" => "El respaldo esta corrupto o tiene otro formato."];
     }
 
@@ -447,6 +469,15 @@ function restaurar_respaldo(PDO $pdo, string $dir, string $archivo): array
     try {
         $pdo->beginTransaction();
         $pdo->exec("DELETE FROM productos");
+
+        if (count($categorias_respaldo) > 0) {
+            $pdo->exec("DELETE FROM categorias");
+            $stmt_cat = $pdo->prepare("INSERT INTO categorias (id, categoria) VALUES (?, ?)");
+            foreach ($categorias_respaldo as $c) {
+                $stmt_cat->execute([(int)$c["id"], $c["categoria"]]);
+            }
+        }
+
         $stmt = $pdo->prepare("INSERT INTO productos (id, id_categoria, producto, precio, imagen, descripcion, stock) VALUES (?, ?, ?, ?, ?, ?, ?)");
         foreach ($datos["productos"] as $p) {
             $stmt->execute([
@@ -468,7 +499,11 @@ function restaurar_respaldo(PDO $pdo, string $dir, string $archivo): array
         return ["ok" => false, "mensaje" => "No se pudo restaurar el respaldo. La base quedó sin cambios."];
     }
 
-    return ["ok" => true, "mensaje" => "Se restauraron " . count($datos["productos"]) . " productos desde " . basename($archivo) . "."];
+    return [
+        "ok" => true,
+        "mensaje" => "Se restauraron " . count($datos["productos"]) . " productos y "
+            . count($categorias_respaldo) . " categorias desde " . basename($archivo) . ".",
+    ];
 }
 
 $categorias = leer_categorias($pdo);
@@ -508,37 +543,80 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $errores[] = "No se detecto ningun producto. Cada linea necesita un codigo, por ejemplo A-001, B-10 o C-04.";
         }
 
+        /* Conservar solo la última ocurrencia de cada SKU para no duplicar productos. */
+        $por_sku = [];
+        $duplicados = 0;
+        foreach ($filas as $f) {
+            if (isset($por_sku[$f["sku"]])) {
+                $duplicados++;
+            }
+            $por_sku[$f["sku"]] = $f;
+        }
+        $filas = array_values($por_sku);
+        if ($duplicados > 0) {
+            $avisos[] = $duplicados . " codigo(s) repetido(s): se uso solo la ultima linea de cada uno.";
+        }
+
         $existentes = indexar_existentes($pdo);
         $plan = planificar($filas, $existentes, $categorias);
 
+        /* Solo las filas válidas cuentan como presentes al agotar ausentes. */
+        $skus_validos = [];
+        foreach ($plan as $f) {
+            if (count($f["errores"]) === 0) {
+                $skus_validos[] = $f["sku"];
+            }
+        }
+
+        if ($accion === "aplicar" && count($errores) === 0 && count($skus_validos) === 0) {
+            $errores[] = "No hay filas validas para aplicar. Revisá el listado.";
+        }
+
         if ($accion === "aplicar" && count($errores) === 0) {
-            $archivo_respaldo = crear_respaldo($pdo, $dir_respaldos);
-            $resumen = aplicar_plan($pdo, $plan, $categorias, $raiz);
-
+            $archivo_respaldo = "";
+            $resumen = null;
             $agotados = 0;
-            if ($agotar_ausentes) {
-                $marcados = marcar_ausentes($pdo, array_column($filas, "sku"));
-                $agotados = count($marcados);
+
+            try {
+                $pdo->beginTransaction();
+
+                $archivo_respaldo = crear_respaldo($pdo, $dir_respaldos);
+                $resumen = aplicar_plan($pdo, $plan, $categorias, $raiz);
+
+                if ($agotar_ausentes) {
+                    $marcados = marcar_ausentes($pdo, array_unique($skus_validos));
+                    $agotados = count($marcados);
+                }
+
+                $pdo->commit();
+            } catch (Throwable $e) {
+                if ($pdo->inTransaction()) {
+                    $pdo->rollBack();
+                }
+                error_log("MC importar: " . $e->getMessage());
+                $errores[] = "No se pudo aplicar la importacion. La base quedo sin cambios.";
             }
 
-            $partes = [
-                $resumen["creados"] . " nuevos",
-                $resumen["actualizados"] . " actualizados",
-                $resumen["sin_cambios"] . " sin cambios",
-                $resumen["omitidos"] . " omitidos",
-            ];
-            if ($agotados > 0) {
-                $partes[] = $agotados . " puestos en agotado";
-            }
-            if (count($resumen["categorias_nuevas"]) > 0) {
-                $partes[] = "categorias creadas: " . implode(", ", array_unique($resumen["categorias_nuevas"]));
-            }
-            if (count($resumen["errores"]) > 0) {
-                $partes[] = "Omitidos: " . implode(" | ", $resumen["errores"]);
-            }
+            if (count($errores) === 0 && $resumen !== null) {
+                $partes = [
+                    $resumen["creados"] . " nuevos",
+                    $resumen["actualizados"] . " actualizados",
+                    $resumen["sin_cambios"] . " sin cambios",
+                    $resumen["omitidos"] . " omitidos",
+                ];
+                if ($agotados > 0) {
+                    $partes[] = $agotados . " puestos en agotado";
+                }
+                if (count($resumen["categorias_nuevas"]) > 0) {
+                    $partes[] = "categorias creadas: " . implode(", ", array_unique($resumen["categorias_nuevas"]));
+                }
+                if (count($resumen["errores"]) > 0) {
+                    $partes[] = "Omitidos: " . implode(" | ", $resumen["errores"]);
+                }
 
-            $_SESSION["flash"] = "Importacion aplicada: " . implode(". ", $partes) . ". Respaldo: " . $archivo_respaldo;
-            redirigir("importar.php");
+                $_SESSION["flash"] = "Importacion aplicada: " . implode(". ", $partes) . ". Respaldo: " . $archivo_respaldo;
+                redirigir("importar.php");
+            }
         }
     }
 }
@@ -634,6 +712,12 @@ unset($_SESSION["flash"]);
                         <?php if (count($errores) > 0): ?>
                             <div class="alert alert-danger py-2 small mb-3">
                                 <?php foreach ($errores as $e): ?><div>&bull; <?= htmlspecialchars($e) ?></div><?php endforeach; ?>
+                            </div>
+                        <?php endif; ?>
+
+                        <?php if (count($avisos) > 0): ?>
+                            <div class="alert alert-info py-2 small mb-3">
+                                <?php foreach ($avisos as $a): ?><div>&bull; <?= htmlspecialchars($a) ?></div><?php endforeach; ?>
                             </div>
                         <?php endif; ?>
 
@@ -778,7 +862,8 @@ function cargar_script_pie(): void {
             $("#btnAplicar").removeClass("d-none");
         }
         $("#formImportar").on("submit", function (e) {
-            if (this.submitter && this.submitter.id === "btnAplicar") {
+            const submitter = e.originalEvent && e.originalEvent.submitter;
+            if (submitter && submitter.id === "btnAplicar") {
                 $("#accion").val("aplicar");
                 if (!confirm("Se van a guardar los cambios en el catalogo. Confirmar?")) {
                     e.preventDefault();
