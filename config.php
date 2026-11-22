@@ -8,6 +8,59 @@ if ($mc_host_actual !== "" && !in_array($mc_host_actual, ["localhost", "127.0.0.
     ini_set("log_errors", "1");
 }
 
+/* ---------- Configuración desde .env (con valores por defecto para XAMPP) ---------- */
+function mc_cargar_env(string $archivo): void
+{
+    if (!is_file($archivo) || !is_readable($archivo)) {
+        return;
+    }
+    $lineas = file($archivo, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    if ($lineas === false) {
+        return;
+    }
+    foreach ($lineas as $linea) {
+        $linea = trim($linea);
+        if ($linea === "" || str_starts_with($linea, "#")) {
+            continue;
+        }
+        if (stripos($linea, "export ") === 0) {
+            $linea = trim(substr($linea, 7));
+        }
+        $partes = explode("=", $linea, 2);
+        if (count($partes) !== 2) {
+            continue;
+        }
+        $clave = trim($partes[0]);
+        $valor = trim($partes[1]);
+        if ($clave === "" || !preg_match('/^[A-Za-z_][A-Za-z0-9_]*$/', $clave)) {
+            continue;
+        }
+        if (isset($_ENV[$clave]) || isset($_SERVER[$clave]) || getenv($clave) !== false) {
+            continue;
+        }
+        if (strlen($valor) >= 2
+            && (($valor[0] === '"' && str_ends_with($valor, '"'))
+                || ($valor[0] === "'" && str_ends_with($valor, "'")))) {
+            $valor = substr($valor, 1, -1);
+        }
+        $_ENV[$clave] = $valor;
+    }
+}
+
+function mc_env(string $clave, string $por_defecto = ""): string
+{
+    if (isset($_ENV[$clave]) && is_scalar($_ENV[$clave])) {
+        return (string)$_ENV[$clave];
+    }
+    if (isset($_SERVER[$clave]) && is_scalar($_SERVER[$clave])) {
+        return (string)$_SERVER[$clave];
+    }
+    $valor = getenv($clave);
+    return $valor === false ? $por_defecto : (string)$valor;
+}
+
+mc_cargar_env(__DIR__ . "/.env");
+
 /* Sesión con cookies endurecidas (HttpOnly + SameSite). */
 if (session_status() === PHP_SESSION_NONE) {
     $mc_https = (!empty($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] !== "off")
@@ -21,12 +74,12 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-define("DB_SERVIDOR", "localhost");
-define("DB_USUARIO", "root");
-define("DB_PASSWORD", "");
-define("DB_NOMBRE", "catalogo");
+define("DB_SERVIDOR", mc_env("DB_HOST", "localhost"));
+define("DB_USUARIO", mc_env("DB_USER", "root"));
+define("DB_PASSWORD", mc_env("DB_PASSWORD", ""));
+define("DB_NOMBRE", mc_env("DB_NAME", "catalogo"));
 
-define("WHATSAPP", "5492235970665"); // numero con prefijo pais, ej: 5491100000000
+define("WHATSAPP", mc_env("WHATSAPP", "5492235970665")); // numero con prefijo pais, ej: 5491100000000
 
 // Utilidades de URL para el deploy
 function url_base(): string

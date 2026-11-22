@@ -27,5 +27,11 @@ Si Apache no está corriendo, el `.bat` avisa y no abre el navegador.
 
 ## Configuración
 
-La conexión a MySQL y el número de WhatsApp están definidos en `config.php`.
-No subir credenciales reales: `.env` y `.env.*` están ignorados por Git.
+La conexión a MySQL y el número de WhatsApp se leen desde variables de entorno.
+
+1. Copiar `.env.example` como `.env`.
+2. Ajustar `DB_HOST`, `DB_USER`, `DB_PASSWORD`, `DB_NAME` y `WHATSAPP`.
+
+Si no existe `.env`, `config.php` usa los valores por defecto de XAMPP (`root`, sin password, base `catalogo`), así que el sitio sigue funcionando igual.
+
+No subir credenciales reales: `.env` y `.env.*` están ignorados por Git. Apache también bloquea el acceso directo a `.env`.
