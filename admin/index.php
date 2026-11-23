@@ -6,7 +6,7 @@ $pdo = conectar();
 $total_productos = (int)$pdo->query("SELECT COUNT(*) FROM productos")->fetchColumn();
 $total_categorias = (int)$pdo->query("SELECT COUNT(*) FROM categorias")->fetchColumn();
 $total_pedidos = (int)$pdo->query("SELECT COUNT(*) FROM pedidos")->fetchColumn();
-$total_ventas = (float)$pdo->query("SELECT COALESCE(SUM(total),0) FROM pedidos")->fetchColumn();
+$total_ventas = (float)$pdo->query("SELECT COALESCE(SUM(total),0) FROM pedidos WHERE estado <> 'cancelado'")->fetchColumn();
 
 // Pedidos por estado
 $por_estado = [];
@@ -15,10 +15,10 @@ foreach ($pdo->query("SELECT estado, COUNT(*) AS n, COALESCE(SUM(total),0) AS mo
 }
 
 // Ventas últimos 6 meses
-$mes = $pdo->query("SELECT DATE_FORMAT(fecha, '%Y-%m') AS ym, COUNT(*) AS n, COALESCE(SUM(total),0) AS monto FROM pedidos WHERE fecha >= DATE_SUB(NOW(), INTERVAL 6 MONTH) GROUP BY ym ORDER BY ym DESC")->fetchAll();
+$mes = $pdo->query("SELECT DATE_FORMAT(fecha, '%Y-%m') AS ym, COUNT(*) AS n, COALESCE(SUM(total),0) AS monto FROM pedidos WHERE estado <> 'cancelado' AND fecha >= DATE_SUB(NOW(), INTERVAL 6 MONTH) GROUP BY ym ORDER BY ym DESC")->fetchAll();
 
 // Productos más vendidos
-$mas_vendidos = $pdo->query("SELECT producto_nombre, SUM(cantidad) AS cant, SUM(cantidad*precio) AS monto FROM detalle_pedidos GROUP BY producto_nombre ORDER BY cant DESC LIMIT 5")->fetchAll();
+$mas_vendidos = $pdo->query("SELECT d.producto_nombre, SUM(d.cantidad) AS cant, SUM(d.cantidad*d.precio) AS monto FROM detalle_pedidos d INNER JOIN pedidos p ON p.id = d.id_pedido WHERE p.estado <> 'cancelado' GROUP BY d.producto_nombre ORDER BY cant DESC LIMIT 5")->fetchAll();
 
 // Stock bajo
 $stock_bajo = $pdo->query("SELECT producto, stock FROM productos WHERE stock <= 2 ORDER BY stock ASC, producto")->fetchAll();

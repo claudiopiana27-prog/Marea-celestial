@@ -1,0 +1,19 @@
+# Configuración local (nunca subir secretos)
+.env
+.env.*
+!.env.example
+
+# Dependencias y artefactos de build
+/vendor/
+/node_modules/
+public/build/
+
+# Temporales del sistema, editor y logs
+.DS_Store
+Thumbs.db
+desktop.ini
+*.log
+*.tmp
+
+# Metadata local de herramientas (no es parte del proyecto)
+.freebuff/

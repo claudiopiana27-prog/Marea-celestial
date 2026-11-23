@@ -224,6 +224,7 @@ ob_start();
     const PROD_ID = <?= (int)$producto["id"] ?>;
     const PROD_NOMBRE = <?= json_encode($producto["producto"], JSON_UNESCAPED_UNICODE) ?>;
     const PROD_PRECIO = <?= json_encode($precio, JSON_UNESCAPED_UNICODE) ?>;
+    const PROD_PRECIO_NUM = <?= json_encode((float)$producto["precio"], JSON_UNESCAPED_UNICODE) ?>;
     const PROD_IMG = <?= json_encode($imagen_full, JSON_UNESCAPED_UNICODE) ?>;
     const MAX_STOCK = <?= max(0, (int)$producto["stock"]) ?>;
     const WHATSAPP = <?= json_encode(WHATSAPP, JSON_UNESCAPED_UNICODE) ?>;
@@ -251,9 +252,14 @@ ob_start();
         }
     });
 
+    function mxn(valor) {
+        return "$" + Math.round(valor).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
     function waDirecto(qty) {
         const q = Math.max(1, Math.min(qty, MAX_STOCK));
-        const txt = `Hola, quiero pedir:%0A- ${encodeURIComponent(PROD_NOMBRE)} x${q} = ${encodeURIComponent(PROD_PRECIO)}%0ATotal: ${encodeURIComponent(PROD_PRECIO)}%0A(Desde ${encodeURIComponent('Marea Celestial')})`;
+        const unitario = mxn(PROD_PRECIO_NUM);
+        const total = mxn(PROD_PRECIO_NUM * q);
+        const txt = `Hola, quiero pedir:%0A- ${encodeURIComponent(PROD_NOMBRE)} x${q} = ${encodeURIComponent(unitario)}%0ATotal: ${encodeURIComponent(total)}%0A(Desde ${encodeURIComponent('Marea Celestial')})`;
         const url = 'https://wa.me/' + WHATSAPP.replace(/\D/g, '') + '?text=' + txt;
         $('#btnWpDirecto').attr('href', url);
     }
