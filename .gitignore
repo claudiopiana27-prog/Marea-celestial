@@ -4,8 +4,8 @@
 !.env.example
 
 # Dependencias y artefactos de build
-vendor/
-node_modules/
+/vendor/
+/node_modules/
 public/build/
 
 # Temporales del sistema, editor y logs

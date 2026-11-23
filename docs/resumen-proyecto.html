@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Marea Celestial · Mapa técnico del repositorio</title>
+<title>Marea Celestial · Documentación y mapa del repositorio</title>
 <style>
   :root{--navy:#0C2D48;--navy2:#081C30;--gold:#C9A227;--gold2:#D4AF37;--cream:#F5F0E8;--ink:#16283a;--muted:#657585;--line:#d9e0e6;--danger:#a12d2d;--ok:#1d6b4f}
   *{box-sizing:border-box}
@@ -63,9 +63,10 @@
     <p>Síntesis de cada carpeta y cada archivo versionado del proyecto real: la aplicación PHP procedural de la raíz, el panel <code>admin/</code>, el export estático <code>html/</code> y las maquetas de diseño.</p>
     <div class="meta">
       <span class="pill">Generado: 22/11/2026</span>
-      <span class="pill">Archivos versionados: 220</span>
+      <span class="pill">Archivos versionados: 221</span>
       <span class="pill">Rama: cambiar-README</span>
       <span class="pill">Vista previa: abrir este HTML en el navegador o publicarlo en GitHub Pages desde /docs</span>
+      <span class="pill">GitHub Pages: https://claudiopiana27-prog.github.io/Marea-celestial/</span>
     </div>
   </div>
 </header>
@@ -76,26 +77,25 @@
 <section id="resumen"><h2><span class="num">00</span>Resumen</h2>
 <p class="lead">El repositorio contiene una sola aplicación real: el sitio PHP de la raíz. <code>html/</code> es un export estático derivado y <code>maquetas/</code> es referencia de diseño; ninguno de los dos reemplaza al sitio dinámico.</p>
 <div class="cards">
-<div class="card"><b>Ra&#237;z del proyecto</b><span>19 archivos · Entrada PHP, configuraci&#243;n central, esquema SQL, lanzador y documentaci&#243;n.</span></div>
+<div class="card"><b>Ra&#237;z del proyecto</b><span>18 archivos · Entrada PHP, configuraci&#243;n central, esquema SQL, lanzador y documentaci&#243;n.</span></div>
 <div class="card"><b>admin/ — Panel de administraci&#243;n</b><span>14 archivos · 14 archivos. Acceso con login + CSRF, ABM, pedidos, importador y respaldos protegidos.</span></div>
 <div class="card"><b>api/ — Endpoints JSON</b><span>2 archivos · Dos endpoints: cat&#225;logo p&#250;blico (GET) y creaci&#243;n de pedidos (POST).</span></div>
 <div class="card"><b>assets/ — Estilos y librer&#237;as</b><span>6 archivos · CSS/JS compartidos por la app PHP. Incluye Bootstrap y jQuery versionados localmente.</span></div>
 <div class="card"><b>partials/ — Piezas compartidas</b><span>3 archivos · Header, footer y carrito global: se incluyen desde casi todas las p&#225;ginas PHP.</span></div>
 <div class="card"><b>img/ — Im&#225;genes de la app PHP</b><span>80 archivos · Cat&#225;logo, fuentes para importar, promociones, logo, favicon y Open Graph.</span></div>
-<div class="card"><b>html/ — Export est&#225;tico</b><span>89 archivos · 89 archivos. Sitio HTML puro sin PHP ni BD; se abre con abrir-sitio.bat estatico.</span></div>
+<div class="card"><b>html/ — Export est&#225;tico</b><span>89 archivos · 89 archivos. Sitio HTML puro sin PHP ni BD; disponible en http://localhost/Marea_celestial/html/.</span></div>
 <div class="card"><b>maquetas/ — Dise&#241;o original</b><span>6 archivos · 6 archivos. Maquetas HTML de referencia visual; NO se sirven desde Apache.</span></div>
-<div class="card"><b>docs/ — Documentaci&#243;n</b><span>1 archivos · 1 archivo HTML autocontenido con el mapa t&#233;cnico del repositorio.</span></div>
+<div class="card"><b>docs/ — Documentaci&#243;n</b><span>3 archivos · 1 archivo HTML autocontenido con el mapa t&#233;cnico del repositorio.</span></div>
 </div>
 <div class="nota ok"><b>Regla rápida:</b> para el sitio en producción se usa la raíz PHP + <code>img/</code> + <code>assets/</code> + <code>partials/</code> + <code>api/</code>. <code>html/</code> se publica tal cual solo en el modo estático. <code>maquetas/</code> no se sirve.</div>
 </section>
 <section id="raiz"><h2><span class="num">01</span>Ra&#237;z del proyecto</h2>
-<p class="lead">Entrada PHP, configuraci&#243;n central, esquema SQL, lanzador y documentaci&#243;n. <strong>19 archivos</strong> (19 de código/configuración, 0 imágenes).</p>
+<p class="lead">Entrada PHP, configuraci&#243;n central, esquema SQL, lanzador y documentaci&#243;n. <strong>18 archivos</strong> (18 de código/configuración, 0 imágenes).</p>
 <table><thead><tr><th>Archivo</th><th>Función</th><th>Notas / dependencias</th></tr></thead><tbody>
 <tr><td>.env.example</td><td>Plantilla de entorno — Documenta DB_HOST, DB_USER, DB_PASSWORD, DB_NAME y WHATSAPP.</td><td>Copiar como .env. El archivo real est&#225; ignorado por Git y bloqueado por Apache.</td></tr>
 <tr><td>.gitignore</td><td>Reglas de Git — Excluye .env, .env.*, vendor/, node_modules/, logs, temporales y .freebuff/.</td><td>La excepci&#243;n !.env.example permite versionar la plantilla.</td></tr>
 <tr><td>.htaccess</td><td>Configuraci&#243;n Apache — Rewrites de robots.txt y sitemap.xml, ErrorDocument 404, cabeceras CSP, cach&#233; y compresi&#243;n.</td><td>Bloquea config.php, .sql, .env y .git. El 404 es absoluto: /Marea_celestial/404.php.</td></tr>
 <tr><td>404.php</td><td>P&#225;gina de error — Devuelve 404 real con header/footer compartidos y enlaces de recuperaci&#243;n.</td><td>Tambi&#233;n la usan producto.php y productos.php para IDs o categor&#237;as inv&#225;lidos.</td></tr>
-<tr><td>abrir-sitio.bat</td><td>Lanzador Windows — Abre el navegador en el sitio din&#225;mico; con el argumento estatico abre html/.</td><td>Verifica HTTP con curl --max-time 5; si falla, pide iniciar Apache/MySQL.</td></tr>
 <tr><td>catalogo.sql</td><td>Esquema y datos iniciales — Crea categorias (3), productos (12), pedidos, detalle_pedidos y usuarios (admin con hash bcrypt).</td><td>Cuidado: usa DROP TABLE IF EXISTS; reimportar borra datos. No hay foreign keys.</td></tr>
 <tr><td>colecciones.php</td><td>P&#225;gina de colecciones — Muestra cada categor&#237;a con su cantidad y hasta 4 miniaturas; enlaza a productos.php?id=N y producto.php?id=N.</td><td>Usa imagen_producto(), imagen_thumb() y partials. Captura fallos de BD en $mc_error_bd.</td></tr>
 <tr><td>config.php</td><td>Bootstrap central — Carga .env, define DB_* y WHATSAPP, inicia sesi&#243;n y concentra utilidades: URLs, PDO, precios, im&#225;genes, JSON, redirecci&#243;n, limpieza, login y CSRF.</td><td>Casi todo el sitio depende de &#233;l. Oculta errores en hosts que no sean locales.</td></tr>
@@ -260,7 +260,7 @@
 </div></details>
 </section>
 <section id="html"><h2><span class="num">07</span>html/ — Export est&#225;tico</h2>
-<p class="lead">89 archivos. Sitio HTML puro sin PHP ni BD; se abre con abrir-sitio.bat estatico. <strong>89 archivos</strong> (30 de código/configuración, 59 imágenes).</p>
+<p class="lead">89 archivos. Sitio HTML puro sin PHP ni BD; disponible en http://localhost/Marea_celestial/html/. <strong>89 archivos</strong> (30 de código/configuración, 59 imágenes).</p>
 <div class="nota"><b>Export, no app:</b> aquí no hay PHP ni base de datos. El carrito vive en <code>localStorage</code> y el pedido se arma como mensaje de WhatsApp. Antes de publicar, reemplazar <code>https://tudominio.com</code> y los datos bancarios de ejemplo.</div>
 <table><thead><tr><th>Archivo</th><th>Función</th><th>Notas / dependencias</th></tr></thead><tbody>
 <tr><td>html/.htaccess</td><td>Apache del export — Options -Indexes, ErrorDocument 404 /404.html, cabeceras de seguridad, DEFLATE y cach&#233; de 1 a&#241;o para assets.</td><td>Asume que html/ se publica en la ra&#237;z del dominio.</td></tr>
@@ -380,9 +380,11 @@
 </tbody></table>
 </section>
 <section id="docs"><h2><span class="num">09</span>docs/ — Documentaci&#243;n</h2>
-<p class="lead">1 archivo HTML autocontenido con el mapa t&#233;cnico del repositorio. <strong>1 archivos</strong> (1 de código/configuración, 0 imágenes).</p>
+<p class="lead">1 archivo HTML autocontenido con el mapa t&#233;cnico del repositorio. <strong>3 archivos</strong> (3 de código/configuración, 0 imágenes).</p>
 <table><thead><tr><th>Archivo</th><th>Función</th><th>Notas / dependencias</th></tr></thead><tbody>
-<tr><td>docs/resumen-proyecto.html</td><td>Mapa t&#233;cnico HTML — Documento generado desde git ls-files: prop&#243;sito del proyecto, rol de cada carpeta y ficha de cada archivo.</td><td>Abrir en el navegador o publicar docs/ con GitHub Pages. Se regenera si cambia el &#225;rbol de archivos.</td></tr>
+<tr><td>docs/.nojekyll</td><td>Se&#241;al para GitHub Pages — Archivo vac&#237;o que desactiva la compilaci&#243;n con Jekyll.</td><td>Evita errores al publicar HTML est&#225;tico con archivos/carpetas especiales.</td></tr>
+<tr><td>docs/index.html</td><td>Portada de GitHub Pages — Mapa t&#233;cnico completo del repositorio; es la p&#225;gina que sirve GitHub Pages desde la carpeta /docs.</td><td>Fuente de Pages: rama main, carpeta /docs. URL p&#250;blica: https://claudiopiana27-prog.github.io/Marea-celestial/.</td></tr>
+<tr><td>docs/resumen-proyecto.html</td><td>Mapa t&#233;cnico HTML — Copia del mapa t&#233;cnico para consulta local dentro del repositorio.</td><td>Contenido equivalente a docs/index.html; se regenera junto con &#233;l.</td></tr>
 </tbody></table>
 </section>
 <section id="flujo"><h2><span class="num">10</span>Flujo de la aplicación</h2>
@@ -400,8 +402,8 @@
 
 <section id="arranque"><h2><span class="num">11</span>Cómo arrancarlo</h2>
 <table><thead><tr><th>Modo</th><th>Pasos</th><th>Notas</th></tr></thead><tbody>
-<tr><td>Dinámico (real)</td><td>Iniciar Apache + MySQL en XAMPP → importar <code>catalogo.sql</code> → (opcional) copiar <code>.env.example</code> a <code>.env</code> → ejecutar <code>abrir-sitio.bat</code>.</td><td>URL: <code>http://localhost/Marea_celestial/</code>. Sin <code>.env</code> se usan root / sin password / base <code>catalogo</code>.</td></tr>
-<tr><td>Estático</td><td>Ejecutar <code>abrir-sitio.bat estatico</code> para abrir <code>html/</code>, o publicar esa carpeta en la raíz del hosting.</td><td>Reemplazar <code>https://tudominio.com</code> en robots.txt, sitemap.xml y HTML; reemplazar los datos bancarios de ejemplo.</td></tr>
+<tr><td>Dinámico (real)</td><td>Iniciar Apache + MySQL en XAMPP → importar <code>catalogo.sql</code> → (opcional) copiar <code>.env.example</code> a <code>.env</code> → abrir la URL.</td><td>URL: <code>http://localhost/Marea_celestial/</code>. Sin <code>.env</code> se usan root / sin password / base <code>catalogo</code>.</td></tr>
+<tr><td>Estático</td><td>Abrir <code>http://localhost/Marea_celestial/html/</code> o publicar esa carpeta en la raíz del hosting.</td><td>Reemplazar <code>https://tudominio.com</code> en robots.txt, sitemap.xml y HTML; reemplazar los datos bancarios de ejemplo.</td></tr>
 <tr><td>Administración</td><td>Entrar a <code>/Marea_celestial/admin/login.php</code> con el usuario de <code>catalogo.sql</code>.</td><td>Todos los POST usan CSRF. El importador guarda un respaldo antes de aplicar cambios.</td></tr>
 </tbody></table>
 </section>

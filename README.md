@@ -6,12 +6,13 @@ Marroquinería urbana hecha para el día a día ✨
 El sitio real corre con Apache + MySQL de XAMPP (no usa `php artisan serve`).
 
 1. Abrir el panel de XAMPP y arrancar **Apache** y **MySQL**.
-2. Doble clic en `abrir-sitio.bat`.
+2. Importar `catalogo.sql` en phpMyAdmin (una sola vez).
+3. Abrir la URL que corresponda:
 
 - Sitio real: <http://localhost/Marea_celestial/>
-- Versión estática exportada: `abrir-sitio.bat estatico` → <http://localhost/Marea_celestial/html/>
+- Versión estática exportada: <http://localhost/Marea_celestial/html/>
 
-Si Apache no está corriendo, el `.bat` avisa y no abre el navegador.
+Si Apache no está corriendo, las URL no cargan.
 
 ## Estructura del repo
 
@@ -22,13 +23,19 @@ Si Apache no está corriendo, el `.bat` avisa y no abre el navegador.
 - `assets/`: CSS y JS del sitio.
 - `img/`: imágenes del catálogo, promociones y fuentes para importar.
 - `catalogo.sql`: esquema y datos iniciales de MySQL.
-- `html/`: exportación HTML estática (se abre con `abrir-sitio.bat estatico`).
+- `html/`: exportación HTML estática (<http://localhost/Marea_celestial/html/>).
 - `maquetas/`: HTML originales de diseño; **no se sirven** desde Apache.
-- `docs/`: documentación del repo; abrir `docs/resumen-proyecto.html` para el mapa completo por carpeta y archivo.
+- `docs/`: documentación y GitHub Pages; `docs/index.html` es el mapa completo por carpeta y archivo.
 
-## Mapa técnico del repositorio
+## Mapa técnico y GitHub Pages
 
-`docs/resumen-proyecto.html` resume el propósito de Marea Celestial, el rol de cada carpeta y qué hace cada archivo conservado, con sus dependencias y reglas de mantenimiento. Abrilo en el navegador o publicá `docs/` con GitHub Pages para verlo como página (GitHub muestra el HTML como código fuente).
+`docs/index.html` es la versión pública de la documentación: resume el propósito de Marea Celestial, el rol de cada carpeta y qué hace cada archivo conservado, con sus dependencias y reglas de mantenimiento. `docs/resumen-proyecto.html` es la misma guía para consulta local.
+
+- URL pública: <https://claudiopiana27-prog.github.io/Marea-celestial/>
+- Fuente a seleccionar en **Settings > Pages**: rama `main`, carpeta `/docs`.
+- `docs/.nojekyll` evita que GitHub intente compilar el sitio con Jekyll.
+
+Para verlo en local, abrir `docs/index.html` en el navegador.
 
 ## Configuración
 
