@@ -93,7 +93,7 @@
 <p class="lead">Entrada PHP, configuraci&#243;n central, esquema SQL, lanzador y documentaci&#243;n. <strong>18 archivos</strong> (18 de código/configuración, 0 imágenes).</p>
 <table><thead><tr><th>Archivo</th><th>Función</th><th>Notas / dependencias</th></tr></thead><tbody>
 <tr><td>.env.example</td><td>Plantilla de entorno — Documenta DB_HOST, DB_USER, DB_PASSWORD, DB_NAME y WHATSAPP.</td><td>Copiar como .env. El archivo real est&#225; ignorado por Git y bloqueado por Apache.</td></tr>
-<tr><td>.gitignore</td><td>Reglas de Git — Excluye .env, .env.*, vendor/, node_modules/, logs, temporales y .freebuff/.</td><td>La excepci&#243;n !.env.example permite versionar la plantilla.</td></tr>
+<tr><td>.gitignore</td><td>Reglas de Git — Excluye .env, .env.*, vendor/, node_modules/, logs, temporales, *.bat y .freebuff/.</td><td>La excepci&#243;n !.env.example permite versionar la plantilla.</td></tr>
 <tr><td>.htaccess</td><td>Configuraci&#243;n Apache — Rewrites de robots.txt y sitemap.xml, ErrorDocument 404, cabeceras CSP, cach&#233; y compresi&#243;n.</td><td>Bloquea config.php, .sql, .env y .git. El 404 es absoluto: /Marea_celestial/404.php.</td></tr>
 <tr><td>404.php</td><td>P&#225;gina de error — Devuelve 404 real con header/footer compartidos y enlaces de recuperaci&#243;n.</td><td>Tambi&#233;n la usan producto.php y productos.php para IDs o categor&#237;as inv&#225;lidos.</td></tr>
 <tr><td>catalogo.sql</td><td>Esquema y datos iniciales — Crea categorias (3), productos (12), pedidos, detalle_pedidos y usuarios (admin con hash bcrypt).</td><td>Cuidado: usa DROP TABLE IF EXISTS; reimportar borra datos. No hay foreign keys.</td></tr>
