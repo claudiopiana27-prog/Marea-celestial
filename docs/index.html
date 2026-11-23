@@ -77,20 +77,20 @@
 <section id="resumen"><h2><span class="num">00</span>Resumen</h2>
 <p class="lead">El repositorio contiene una sola aplicación real: el sitio PHP de la raíz. <code>html/</code> es un export estático derivado y <code>maquetas/</code> es referencia de diseño; ninguno de los dos reemplaza al sitio dinámico.</p>
 <div class="cards">
-<div class="card"><b>Ra&#237;z del proyecto</b><span>18 archivos · Entrada PHP, configuraci&#243;n central, esquema SQL, lanzador y documentaci&#243;n.</span></div>
+<div class="card"><b>Ra&#237;z del proyecto</b><span>18 archivos · Entrada PHP, configuraci&#243;n central, esquema SQL, SEO, PWA y documentaci&#243;n.</span></div>
 <div class="card"><b>admin/ — Panel de administraci&#243;n</b><span>14 archivos · 14 archivos. Acceso con login + CSRF, ABM, pedidos, importador y respaldos protegidos.</span></div>
 <div class="card"><b>api/ — Endpoints JSON</b><span>2 archivos · Dos endpoints: cat&#225;logo p&#250;blico (GET) y creaci&#243;n de pedidos (POST).</span></div>
 <div class="card"><b>assets/ — Estilos y librer&#237;as</b><span>6 archivos · CSS/JS compartidos por la app PHP. Incluye Bootstrap y jQuery versionados localmente.</span></div>
 <div class="card"><b>partials/ — Piezas compartidas</b><span>3 archivos · Header, footer y carrito global: se incluyen desde casi todas las p&#225;ginas PHP.</span></div>
 <div class="card"><b>img/ — Im&#225;genes de la app PHP</b><span>80 archivos · Cat&#225;logo, fuentes para importar, promociones, logo, favicon y Open Graph.</span></div>
-<div class="card"><b>html/ — Export est&#225;tico</b><span>89 archivos · 89 archivos. Sitio HTML puro sin PHP ni BD; disponible en http://localhost/Marea_celestial/html/.</span></div>
+<div class="card"><b>html/ — Export est&#225;tico</b><span>89 archivos · 89 archivos. Sitio HTML puro sin PHP ni BD; disponible sin XAMPP o en http://localhost/Marea_celestial/html/.</span></div>
 <div class="card"><b>maquetas/ — Dise&#241;o original</b><span>6 archivos · 6 archivos. Maquetas HTML de referencia visual; NO se sirven desde Apache.</span></div>
-<div class="card"><b>docs/ — Documentaci&#243;n</b><span>3 archivos · 1 archivo HTML autocontenido con el mapa t&#233;cnico del repositorio.</span></div>
+<div class="card"><b>docs/ — Documentaci&#243;n</b><span>3 archivos · Portada de GitHub Pages, copia del mapa local y archivo .nojekyll.</span></div>
 </div>
-<div class="nota ok"><b>Regla rápida:</b> para el sitio en producción se usa la raíz PHP + <code>img/</code> + <code>assets/</code> + <code>partials/</code> + <code>api/</code>. <code>html/</code> se publica tal cual solo en el modo estático. <code>maquetas/</code> no se sirve.</div>
+<div class="nota ok"><b>Regla rápida:</b> para el sitio en producción se usa la raíz PHP + <code>img/</code> + <code>assets/</code> + <code>partials/</code> + <code>api/</code>. <code>html/</code> se publica tal cual solo en el modo estático (y puede abrirse o servirse sin XAMPP ni .bat). <code>maquetas/</code> no se sirve.</div>
 </section>
 <section id="raiz"><h2><span class="num">01</span>Ra&#237;z del proyecto</h2>
-<p class="lead">Entrada PHP, configuraci&#243;n central, esquema SQL, lanzador y documentaci&#243;n. <strong>18 archivos</strong> (18 de código/configuración, 0 imágenes).</p>
+<p class="lead">Entrada PHP, configuraci&#243;n central, esquema SQL, SEO, PWA y documentaci&#243;n. <strong>18 archivos</strong> (18 de código/configuración, 0 imágenes).</p>
 <table><thead><tr><th>Archivo</th><th>Función</th><th>Notas / dependencias</th></tr></thead><tbody>
 <tr><td>.env.example</td><td>Plantilla de entorno — Documenta DB_HOST, DB_USER, DB_PASSWORD, DB_NAME y WHATSAPP.</td><td>Copiar como .env. El archivo real est&#225; ignorado por Git y bloqueado por Apache.</td></tr>
 <tr><td>.gitignore</td><td>Reglas de Git — Excluye .env, .env.*, vendor/, node_modules/, logs, temporales y .freebuff/.</td><td>La excepci&#243;n !.env.example permite versionar la plantilla.</td></tr>
@@ -155,7 +155,7 @@
 <table><thead><tr><th>Archivo</th><th>Función</th><th>Notas / dependencias</th></tr></thead><tbody>
 <tr><td>partials/carrito.php</td><td>Carrito global — FAB, modal, formulario de pedido, medios de pago, toast y toda la l&#243;gica localStorage bajo marea_celestial_carrito.</td><td>Postea a api/pedido.php; los datos de transferencia son de ejemplo ($mpAliasREAL = false).</td></tr>
 <tr><td>partials/footer.php</td><td>Cierre compartido — Banda dorada, footer, include del carrito, librer&#237;as, registro del service worker y $mc_scripts.</td><td>Define --mc-navh y el efecto glass, que busca #mainHeader (no existe: es un no-op inofensivo).</td></tr>
-<tr><td>partials/header.php</td><td>Head y navegaci&#243;n compartidos — Meta SEO/OG, carga de los 4 CSS, header y nav. Acepta $mc_titulo, $mc_descripcion, $mc_og_*, $mc_canonical, $mc_head_extra, $mc_body_class y $mc_error_bd.</td><td>CSS con cache-bust por filemtime(); el bot&#243;n Instalar arranca oculto.</td></tr>
+<tr><td>partials/header.php</td><td>Head y navegaci&#243;n compartidos — Meta SEO/OG, carga de los 4 CSS, header y nav. Acepta $mc_titulo, $mc_descripcion,$mc_og_*, $mc_canonical,$mc_head_extra, $mc_body_class y$mc_error_bd.</td><td>CSS con cache-bust por filemtime(); el bot&#243;n Instalar arranca oculto.</td></tr>
 </tbody></table>
 </section>
 <section id="img"><h2><span class="num">06</span>img/ — Im&#225;genes de la app PHP</h2>
@@ -235,187 +235,4 @@
 <span class="chip">img/fuentes/ametronics-a010-cartera-casual.png</span>
 <span class="chip">img/fuentes/ametronics-a013-cartera-clasica.png</span>
 <span class="chip">img/fuentes/ametronics-a014-cartera-clasica.png</span>
-<span class="chip">img/fuentes/ametronics-a016-cartera-casual-importada.png</span>
-<span class="chip">img/fuentes/ametronics-a01-tote-bag.png</span>
-<span class="chip">img/fuentes/ametronics-b10-billetera-grande.png</span>
-<span class="chip">img/fuentes/ametronics-c04-billetera-pocket.png</span>
-<span class="chip">img/fuentes/WhatsApp Image 2026-09-12 at 09.15.50 (1).jpeg</span>
-<span class="chip">img/fuentes/WhatsApp Image 2026-09-12 at 09.15.50 (2).jpeg</span>
-<span class="chip">img/fuentes/WhatsApp Image 2026-09-12 at 09.15.50 (3).jpeg</span>
-<span class="chip">img/fuentes/WhatsApp Image 2026-09-12 at 09.15.50.jpeg</span>
-<span class="chip">img/fuentes/WhatsApp Image 2026-09-12 at 09.15.51 (2).jpeg</span>
-<span class="chip">img/fuentes/WhatsApp Image 2026-09-12 at 09.15.51 (3).jpeg</span>
-<span class="chip">img/fuentes/WhatsApp Image 2026-09-12 at 09.15.51.jpeg</span>
-<span class="chip">img/fuentes/WhatsApp Image 2026-09-12 at 09.15.52.jpeg</span>
-</div></details>
-<details><summary>img\promo<span>7 archivos · Banco de banners por tipo de producto: bolso, cartera y monedero.</span></summary>
-<div class="chips">
-<span class="chip">img/promo/promo-bolso-marea-1.jpg</span>
-<span class="chip">img/promo/promo-bolso-marea-2.jpg</span>
-<span class="chip">img/promo/promo-bolso-marea-3.jpg</span>
-<span class="chip">img/promo/promo-cartera-marea-1.jpg</span>
-<span class="chip">img/promo/promo-cartera-marea-2.jpg</span>
-<span class="chip">img/promo/promo-cartera-marea-3.jpg</span>
-<span class="chip">img/promo/promo-monedero-2.jpg</span>
-</div></details>
-</section>
-<section id="html"><h2><span class="num">07</span>html/ — Export est&#225;tico</h2>
-<p class="lead">89 archivos. Sitio HTML puro sin PHP ni BD; disponible en http://localhost/Marea_celestial/html/. <strong>89 archivos</strong> (30 de código/configuración, 59 imágenes).</p>
-<div class="nota"><b>Export, no app:</b> aquí no hay PHP ni base de datos. El carrito vive en <code>localStorage</code> y el pedido se arma como mensaje de WhatsApp. Antes de publicar, reemplazar <code>https://tudominio.com</code> y los datos bancarios de ejemplo.</div>
-<table><thead><tr><th>Archivo</th><th>Función</th><th>Notas / dependencias</th></tr></thead><tbody>
-<tr><td>html/.htaccess</td><td>Apache del export — Options -Indexes, ErrorDocument 404 /404.html, cabeceras de seguridad, DEFLATE y cach&#233; de 1 a&#241;o para assets.</td><td>Asume que html/ se publica en la ra&#237;z del dominio.</td></tr>
-<tr><td>html/404.html</td><td>404 del export — P&#225;gina de error con enlaces de vuelta, banda dorada y footer.</td><td>La referencia html/.htaccess.</td></tr>
-<tr><td>html/assets/css/bootstrap.min.css</td><td>Vendor CSS (export) — Bootstrap v5.3.3 minificado incluido en el export.</td><td>Copia independiente de assets/css/bootstrap.min.css.</td></tr>
-<tr><td>html/assets/css/marea-home.css</td><td>CSS de inicio (export) — Paleta del flyer con Cormorant + Montserrat; se carga solo en index.html con ?v=20261117014944.</td><td>Copia del export, no la usa la app PHP.</td></tr>
-<tr><td>html/assets/css/marea-tema.css</td><td>Tema global (export) — Remapea tokens de plumage.css a la paleta del flyer; marco de olas, banda dorada, nav y footer.</td><td>Copia del export.</td></tr>
-<tr><td>html/assets/css/plumage.css</td><td>Design system (export) — Tokens y componentes propios: --color-primary, tipograf&#237;a, cards, footer y carrito.</td><td>Paleta base #0A2342 / #2EB5E5 / #C5A880 / #FFFBF2.</td></tr>
-<tr><td>html/assets/js/bootstrap.bundle.min.js</td><td>Vendor JS (export) — Bootstrap v5.3.3 bundle minificado con Popper.</td><td>Copia independiente de assets/js/bootstrap.bundle.min.js.</td></tr>
-<tr><td>html/assets/js/jquery.min.js</td><td>Vendor JS (export) — jQuery v3.7.1 minificado incluido en el export.</td><td>Copia independiente de assets/js/jquery.min.js.</td></tr>
-<tr><td>html/colecciones.html</td><td>Colecciones del export — Tres paneles (Bolsos, Carteras, Monederos) con imagen grande, miniaturas enlazadas y botones Ver/Consultar.</td><td>Equivalente est&#225;tico de colecciones.php.</td></tr>
-<tr><td>html/contacto.html</td><td>Contacto del export — Canales (WhatsApp 5492235970665, Instagram @marea_celestial) y formulario que arma un mensaje para WhatsApp.</td><td>Sin backend: sustituye a contacto.php + api/pedido.php.</td></tr>
-<tr><td>html/index.html</td><td>Inicio del export — Header con Instalar app, hero con luna SVG y og-image, Tres esenciales, grilla de colecci&#243;n, banda dorada y footer.</td><td>53 KB; es el HTML del export modificado m&#225;s recientemente.</td></tr>
-<tr><td>html/manifest.webmanifest</td><td>PWA del export — Marea Celestial, start_url index.html, standalone, colores #FFFBF2 e iconos 512/192/32.</td><td>Versi&#243;n est&#225;tica del manifiesto de la ra&#237;z.</td></tr>
-<tr><td>html/nosotros.html</td><td>Institucional del export — Valores, historia, equipo, FAQ acorde&#243;n y secciones #pagos y #envios.</td><td>Contiene datos narrativos de ejemplo.</td></tr>
-<tr><td>html/producto-1.html</td><td>Ficha est&#225;tica 1 — Ficha de producto del export: imagen principal, precio, stock, cantidad, carrito, WhatsApp, compartir y relacionados.</td><td>Uno de los 12 archivos generados; usa img/catalogo/ y thumbs/.</td></tr>
-<tr><td>html/producto-10.html</td><td>Ficha est&#225;tica 10 — Ficha de producto del export: imagen principal, precio, stock, cantidad, carrito, WhatsApp, compartir y relacionados.</td><td>Uno de los 12 archivos generados; usa img/catalogo/ y thumbs/.</td></tr>
-<tr><td>html/producto-11.html</td><td>Ficha est&#225;tica 11 — Ficha de producto del export: imagen principal, precio, stock, cantidad, carrito, WhatsApp, compartir y relacionados.</td><td>Uno de los 12 archivos generados; usa img/catalogo/ y thumbs/.</td></tr>
-<tr><td>html/producto-12.html</td><td>Ficha est&#225;tica 12 — Ficha de producto del export: imagen principal, precio, stock, cantidad, carrito, WhatsApp, compartir y relacionados.</td><td>Uno de los 12 archivos generados; usa img/catalogo/ y thumbs/.</td></tr>
-<tr><td>html/producto-2.html</td><td>Ficha est&#225;tica 2 — Ficha de producto del export: imagen principal, precio, stock, cantidad, carrito, WhatsApp, compartir y relacionados.</td><td>Uno de los 12 archivos generados; usa img/catalogo/ y thumbs/.</td></tr>
-<tr><td>html/producto-3.html</td><td>Ficha est&#225;tica 3 — Ficha de producto del export: imagen principal, precio, stock, cantidad, carrito, WhatsApp, compartir y relacionados.</td><td>Uno de los 12 archivos generados; usa img/catalogo/ y thumbs/.</td></tr>
-<tr><td>html/producto-4.html</td><td>Ficha est&#225;tica 4 — Ficha de producto del export: imagen principal, precio, stock, cantidad, carrito, WhatsApp, compartir y relacionados.</td><td>Uno de los 12 archivos generados; usa img/catalogo/ y thumbs/.</td></tr>
-<tr><td>html/producto-5.html</td><td>Ficha est&#225;tica 5 — Ficha de producto del export: imagen principal, precio, stock, cantidad, carrito, WhatsApp, compartir y relacionados.</td><td>Uno de los 12 archivos generados; usa img/catalogo/ y thumbs/.</td></tr>
-<tr><td>html/producto-6.html</td><td>Ficha est&#225;tica 6 — Ficha de producto del export: imagen principal, precio, stock, cantidad, carrito, WhatsApp, compartir y relacionados.</td><td>Uno de los 12 archivos generados; usa img/catalogo/ y thumbs/.</td></tr>
-<tr><td>html/producto-7.html</td><td>Ficha est&#225;tica 7 — Ficha de producto del export: imagen principal, precio, stock, cantidad, carrito, WhatsApp, compartir y relacionados.</td><td>Uno de los 12 archivos generados; usa img/catalogo/ y thumbs/.</td></tr>
-<tr><td>html/producto-8.html</td><td>Ficha est&#225;tica 8 — Ficha de producto del export: imagen principal, precio, stock, cantidad, carrito, WhatsApp, compartir y relacionados.</td><td>Uno de los 12 archivos generados; usa img/catalogo/ y thumbs/.</td></tr>
-<tr><td>html/producto-9.html</td><td>Ficha est&#225;tica 9 — Ficha de producto del export: imagen principal, precio, stock, cantidad, carrito, WhatsApp, compartir y relacionados.</td><td>Uno de los 12 archivos generados; usa img/catalogo/ y thumbs/.</td></tr>
-<tr><td>html/productos.html</td><td>Cat&#225;logo del export — Buscador #buscador, chips ?id=1/2/3 y grilla #gridProductos con tarjetas data-img/data-thumb y stock.</td><td>73 KB; equivalente est&#225;tico de productos.php.</td></tr>
-<tr><td>html/README.md</td><td>Gu&#237;a del export est&#225;tico — Explica p&#225;ginas, filtros por ?id=, carrito en localStorage, publicaci&#243;n y placeholders a reemplazar.</td><td>Documentaci&#243;n del export din&#225;mico → HTML puro.</td></tr>
-<tr><td>html/robots.txt</td><td>SEO del export — Allow / y Sitemap https://tudominio.com/sitemap.xml.</td><td>Placeholder: reemplazar tudominio.com antes de publicar.</td></tr>
-<tr><td>html/sitemap.xml</td><td>Sitemap del export — 21 entradas: 5 p&#225;ginas + 12 fichas + 4 URLs de filtros ?id=1/2/3.</td><td>Mismo placeholder tudominio.com; las filtradas aparecen duplicadas.</td></tr>
-<tr><td>html/sw.js</td><td>Service worker del export — Cach&#233; marea-celestial-static-20261117014944, precarga de 5 p&#225;ginas + CSS/JS + logo/favicon y fallback a index.html.</td><td>Acompa&#241;a a html/manifest.webmanifest.</td></tr>
-</tbody></table>
-<h3>Recursos visuales (59)</h3>
-<details><summary>html\img<span>5 archivos · Icono del sitio y de la app instalable en varios tama&#241;os.</span></summary>
-<div class="chips">
-<span class="chip">html/img/favicon-192.png</span>
-<span class="chip">html/img/favicon-32.png</span>
-<span class="chip">html/img/favicon-512.jpg</span>
-<span class="chip">html/img/logo.jpg</span>
-<span class="chip">html/img/og-image.jpg</span>
-</div></details>
-<details><summary>html\img\catalogo<span>35 archivos · Foto principal de uno de los 12 productos reales del cat&#225;logo.</span></summary>
-<div class="chips">
-<span class="chip">html/img/catalogo/mc-25-c-04-billetera-pocket-doble-cierre.jpg</span>
-<span class="chip">html/img/catalogo/mc-26-b-10-billetera-grande-doble-cierre.jpg</span>
-<span class="chip">html/img/catalogo/mc-27-a-001-cartera-c-pa-uelo.jpg</span>
-<span class="chip">html/img/catalogo/mc-28-a-003-cartera-ma-z-doble-cierre.jpg</span>
-<span class="chip">html/img/catalogo/mc-29-a-004-cartera-blanca.jpg</span>
-<span class="chip">html/img/catalogo/mc-30-a-006-cartera-casual.jpg</span>
-<span class="chip">html/img/catalogo/mc-31-a-016-cartera-casual-importada.jpg</span>
-<span class="chip">html/img/catalogo/mc-32-a-009-cartera-casual.jpg</span>
-<span class="chip">html/img/catalogo/mc-33-a-010-cartera-casual.jpg</span>
-<span class="chip">html/img/catalogo/mc-34-a-013-cartera-cl-sica.jpg</span>
-<span class="chip">html/img/catalogo/mc-35-a-014-cartera-cl-sica.jpg</span>
-<span class="chip">html/img/catalogo/mc-36-a-01-tote-bag-28-x-26-cm.jpg</span>
-<span class="chip">html/img/catalogo/nuevo-01.jpg</span>
-<span class="chip">html/img/catalogo/nuevo-02.jpg</span>
-<span class="chip">html/img/catalogo/nuevo-03.jpg</span>
-<span class="chip">html/img/catalogo/nuevo-04.jpg</span>
-<span class="chip">html/img/catalogo/nuevo-05.jpg</span>
-<span class="chip">html/img/catalogo/nuevo-06.jpg</span>
-<span class="chip">html/img/catalogo/nuevo-07.jpg</span>
-<span class="chip">html/img/catalogo/nuevo-08.jpg</span>
-<span class="chip">html/img/catalogo/nuevo-09.jpg</span>
-<span class="chip">html/img/catalogo/nuevo-10.jpg</span>
-<span class="chip">html/img/catalogo/nuevo-11.jpg</span>
-<span class="chip">html/img/catalogo/nuevo-13.jpg</span>
-<span class="chip">html/img/catalogo/nuevo-14.jpg</span>
-<span class="chip">html/img/catalogo/nuevo-15.jpg</span>
-<span class="chip">html/img/catalogo/nuevo-16.jpg</span>
-<span class="chip">html/img/catalogo/WhatsApp Image 2026-09-26 at 11.34.28.jpg</span>
-<span class="chip">html/img/catalogo/WhatsApp Image 2026-09-26 at 12.08.19 (1).jpg</span>
-<span class="chip">html/img/catalogo/WhatsApp Image 2026-09-26 at 12.08.19.jpg</span>
-<span class="chip">html/img/catalogo/WhatsApp Image 2026-09-26 at 12.11.41.jpg</span>
-<span class="chip">html/img/catalogo/WhatsApp Image 2026-09-26 at 12.13.08.jpg</span>
-<span class="chip">html/img/catalogo/WhatsApp Image 2026-09-26 at 12.13.41.jpg</span>
-<span class="chip">html/img/catalogo/WhatsApp Image 2026-09-26 at 12.15.09.jpg</span>
-<span class="chip">html/img/catalogo/WhatsApp Image 2026-09-26 at 12.16.42.jpg</span>
-</div></details>
-<details><summary>html\img\catalogo\thumbs<span>12 archivos · Versi&#243;n reducida de una imagen de cat&#225;logo para grillas, hero y colecciones.</span></summary>
-<div class="chips">
-<span class="chip">html/img/catalogo/thumbs/mc-25-c-04-billetera-pocket-doble-cierre.jpg</span>
-<span class="chip">html/img/catalogo/thumbs/mc-26-b-10-billetera-grande-doble-cierre.jpg</span>
-<span class="chip">html/img/catalogo/thumbs/mc-27-a-001-cartera-c-pa-uelo.jpg</span>
-<span class="chip">html/img/catalogo/thumbs/mc-28-a-003-cartera-ma-z-doble-cierre.jpg</span>
-<span class="chip">html/img/catalogo/thumbs/mc-29-a-004-cartera-blanca.jpg</span>
-<span class="chip">html/img/catalogo/thumbs/mc-30-a-006-cartera-casual.jpg</span>
-<span class="chip">html/img/catalogo/thumbs/mc-31-a-016-cartera-casual-importada.jpg</span>
-<span class="chip">html/img/catalogo/thumbs/mc-32-a-009-cartera-casual.jpg</span>
-<span class="chip">html/img/catalogo/thumbs/mc-33-a-010-cartera-casual.jpg</span>
-<span class="chip">html/img/catalogo/thumbs/mc-34-a-013-cartera-cl-sica.jpg</span>
-<span class="chip">html/img/catalogo/thumbs/mc-35-a-014-cartera-cl-sica.jpg</span>
-<span class="chip">html/img/catalogo/thumbs/mc-36-a-01-tote-bag-28-x-26-cm.jpg</span>
-</div></details>
-<details><summary>html\img\promo<span>7 archivos · Banco de banners por tipo de producto: bolso, cartera y monedero.</span></summary>
-<div class="chips">
-<span class="chip">html/img/promo/promo-bolso-marea-1.jpg</span>
-<span class="chip">html/img/promo/promo-bolso-marea-2.jpg</span>
-<span class="chip">html/img/promo/promo-bolso-marea-3.jpg</span>
-<span class="chip">html/img/promo/promo-cartera-marea-1.jpg</span>
-<span class="chip">html/img/promo/promo-cartera-marea-2.jpg</span>
-<span class="chip">html/img/promo/promo-cartera-marea-3.jpg</span>
-<span class="chip">html/img/promo/promo-monedero-2.jpg</span>
-</div></details>
-</section>
-<section id="maquetas"><h2><span class="num">08</span>maquetas/ — Dise&#241;o original</h2>
-<p class="lead">6 archivos. Maquetas HTML de referencia visual; NO se sirven desde Apache. <strong>6 archivos</strong> (6 de código/configuración, 0 imágenes).</p>
-<div class="nota danger"><b>No servidas:</b> ninguna página de <code>maquetas/</code> está enlazada desde el sitio real. Se conservan solo como referencia visual; usan otra paleta y tipografía.</div>
-<table><thead><tr><th>Archivo</th><th>Función</th><th>Notas / dependencias</th></tr></thead><tbody>
-<tr><td>maquetas/colecciones-mejorado.html</td><td>Maqueta de colecciones — Tarjetas .collection con acentos por colecci&#243;n.</td><td>Usa nombres propios de maqueta (Marea Nocturna, Celestial Flor, Tote Solar), distintos del export.</td></tr>
-<tr><td>maquetas/contacto-mejorado.html</td><td>Maqueta de contacto — Page head, canales en tarjetas .channel y formulario con .btn-gold.</td><td>No servida; reference visual del formulario.</td></tr>
-<tr><td>maquetas/index-mejorado.html</td><td>Maqueta de inicio — Header sticky, carrito, men&#250; m&#243;vil, hero con fondo remoto de Unsplash y secciones de dise&#241;o.</td><td>CSS embebido; tipograf&#237;a Inter y paleta #0a1931 / #d4af37 / #fdfaf3.</td></tr>
-<tr><td>maquetas/productos-mejorado.html</td><td>Maqueta de cat&#225;logo — Page head, panel de filtros por grupos/colores y grilla; usa ../img/catalogo/….</td><td>No servida: referencia visual del dise&#241;o.</td></tr>
-<tr><td>maquetas/README.md</td><td>Gu&#237;a de maquetas — Aclara que son las versiones HTML originales del dise&#241;o y que NO se sirven desde Apache.</td><td>El sitio real es el PHP de la ra&#237;z; las im&#225;genes se referencian con ../img/.</td></tr>
-<tr><td>maquetas/sobre-nosotros-mejorado.html</td><td>Maqueta institucional — Intro con imagen, valores, equipo con avatares de iniciales y FAQ en details.</td><td>No servida; CSS embebido.</td></tr>
-</tbody></table>
-</section>
-<section id="docs"><h2><span class="num">09</span>docs/ — Documentaci&#243;n</h2>
-<p class="lead">1 archivo HTML autocontenido con el mapa t&#233;cnico del repositorio. <strong>3 archivos</strong> (3 de código/configuración, 0 imágenes).</p>
-<table><thead><tr><th>Archivo</th><th>Función</th><th>Notas / dependencias</th></tr></thead><tbody>
-<tr><td>docs/.nojekyll</td><td>Se&#241;al para GitHub Pages — Archivo vac&#237;o que desactiva la compilaci&#243;n con Jekyll.</td><td>Evita errores al publicar HTML est&#225;tico con archivos/carpetas especiales.</td></tr>
-<tr><td>docs/index.html</td><td>Portada de GitHub Pages — Mapa t&#233;cnico completo del repositorio; es la p&#225;gina que sirve GitHub Pages desde la carpeta /docs.</td><td>Fuente de Pages: rama main, carpeta /docs. URL p&#250;blica: https://claudiopiana27-prog.github.io/Marea-celestial/.</td></tr>
-<tr><td>docs/resumen-proyecto.html</td><td>Mapa t&#233;cnico HTML — Copia del mapa t&#233;cnico para consulta local dentro del repositorio.</td><td>Contenido equivalente a docs/index.html; se regenera junto con &#233;l.</td></tr>
-</tbody></table>
-</section>
-<section id="flujo"><h2><span class="num">10</span>Flujo de la aplicación</h2>
-<p class="lead">Cómo se conectan las piezas del sitio dinámico.</p>
-<div class="flujo">
-  <div><b>Visitante</b><small>index.php, productos.php, producto.php, colecciones.php, nosotros.php, contacto.php, 404.php</small></div>
-  <div><b>Piezas compartidas</b><small>partials/header.php, partials/footer.php, partials/carrito.php</small></div>
-  <div><b>Núcleo</b><small>config.php → constantes desde .env, sesión, PDO, utilidades y CSRF</small></div>
-  <div><b>Datos</b><small>catalogo.sql en MySQL: categorias, productos, pedidos, detalle_pedidos, usuarios</small></div>
-  <div><b>Carrito</b><small>localStorage → POST api/pedido.php → valida stock → link de WhatsApp</small></div>
-  <div><b>Admin</b><small>admin/login.php → ABM, pedidos, importar.php → admin/_backups/</small></div>
-</div>
-<div class="nota">El carrito del export estático (<code>html/</code>) NO postea a <code>api/pedido.php</code>: arma directamente un mensaje de WhatsApp. Es la diferencia funcional principal entre ambos modos.</div>
-</section>
-
-<section id="arranque"><h2><span class="num">11</span>Cómo arrancarlo</h2>
-<table><thead><tr><th>Modo</th><th>Pasos</th><th>Notas</th></tr></thead><tbody>
-<tr><td>Dinámico (real)</td><td>Iniciar Apache + MySQL en XAMPP → importar <code>catalogo.sql</code> → (opcional) copiar <code>.env.example</code> a <code>.env</code> → abrir la URL.</td><td>URL: <code>http://localhost/Marea_celestial/</code>. Sin <code>.env</code> se usan root / sin password / base <code>catalogo</code>.</td></tr>
-<tr><td>Estático</td><td>Abrir <code>http://localhost/Marea_celestial/html/</code> o publicar esa carpeta en la raíz del hosting.</td><td>Reemplazar <code>https://tudominio.com</code> en robots.txt, sitemap.xml y HTML; reemplazar los datos bancarios de ejemplo.</td></tr>
-<tr><td>Administración</td><td>Entrar a <code>/Marea_celestial/admin/login.php</code> con el usuario de <code>catalogo.sql</code>.</td><td>Todos los POST usan CSRF. El importador guarda un respaldo antes de aplicar cambios.</td></tr>
-</tbody></table>
-</section>
-
-<section id="mantenimiento"><h2><span class="num">12</span>Reglas de mantenimiento</h2>
-<div class="nota danger"><b>No subir secretos:</b> <code>.env</code> está ignorado por Git y bloqueado por Apache. Versionar solo <code>.env.example</code>.</div>
-<div class="nota danger"><b>No tocar:</b> <code>admin/_backups/.htaccess</code> (protege los respaldos), la transacción y el doble control de stock en <code>api/pedido.php</code>, ni el orden de carga de los CSS en <code>partials/header.php</code>.</div>
-<div class="nota"><b>Vendor:</b> Bootstrap y jQuery están duplicados en <code>assets/</code> y <code>html/assets/</code>. Son librerías minificadas: no editarlas a mano.</div>
-<div class="nota"><b>catalogo.sql:</b> al importarlo se ejecutan <code>DROP TABLE IF EXISTS</code>. Es solo para inicializar; reimportarlo sobre datos reales los borra.</div>
-<div class="nota"><b>Pendiente fuera de este mapa:</b> ajustes medios/bajos relevados en <code>admin/</code> (flash de errores del importador, separador con <code>;</code>, matching fuzzy de categorías, colisión de nombres de backup, entre otros).</div>
-</section>
-</main>
-<footer><div class="wrap">Marea Celestial · Mapa técnico generado desde <code>git ls-files</code> · Este archivo es documentación: no ejecuta código ni consulta la base de datos.</div></footer>
-</body>
-</html>
+<span class="chip
